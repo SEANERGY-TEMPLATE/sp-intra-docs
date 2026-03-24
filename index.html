@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Seanergy - 신규 기능 요구사항 정의서</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#f5f6fa;color:#333;display:flex;min-height:100vh}
+a{color:#4361ee;text-decoration:none}
+
+/* 사이드바 */
+.sidebar{width:260px;background:#1a1a2e;color:#fff;padding:20px 0;position:fixed;height:100vh;overflow-y:auto}
+.sidebar h1{font-size:15px;padding:0 20px 16px;border-bottom:1px solid #2a2a4a;margin-bottom:12px;font-weight:600}
+.sidebar .nav-section{font-size:10px;color:#666;padding:12px 20px 4px;text-transform:uppercase;letter-spacing:1px}
+.sidebar a{display:flex;align-items:center;gap:8px;padding:8px 20px;color:#aab;font-size:13px;transition:all .15s;border-left:3px solid transparent}
+.sidebar a:hover{background:#2a2a4a;color:#fff}
+.sidebar a.active{background:#2a2a4a;color:#4361ee;border-left-color:#4361ee}
+.sidebar .status{font-size:9px;padding:2px 6px;border-radius:8px;margin-left:auto}
+.s-wait{background:#444;color:#aaa}
+.s-wip{background:#1565c0;color:#fff}
+.s-test{background:#e65100;color:#fff}
+.s-done{background:#2e7d32;color:#fff}
+
+/* 메인 */
+.main{margin-left:260px;flex:1;padding:24px 32px 60px}
+.main h2{font-size:20px;font-weight:700;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #e0e0e0}
+
+/* 개요 테이블 */
+.overview{width:100%;border-collapse:collapse;margin-bottom:24px;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.overview th{background:#f8f9fa;text-align:left;padding:10px 14px;font-size:12px;color:#555;border-bottom:1px solid #e8e8e8}
+.overview td{padding:10px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
+.overview tr:last-child td{border-bottom:none}
+.overview tr:hover td{background:#f8f9ff}
+
+/* 기능 카드 */
+.feature{background:#fff;border-radius:8px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.08);overflow:hidden;scroll-margin-top:20px}
+.feature-header{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none;border-bottom:1px solid #f0f0f0}
+.feature-header:hover{background:#fafbff}
+.feature-id{font-size:11px;color:#4361ee;font-weight:700;background:#e8eaf6;padding:2px 8px;border-radius:4px}
+.feature-title{font-size:15px;font-weight:600;margin-left:10px;flex:1}
+.feature-priority{font-size:11px;padding:3px 10px;border-radius:10px;font-weight:600}
+.p-high{background:#ffebee;color:#c62828}
+.p-mid{background:#fff3e0;color:#e65100}
+.p-low{background:#e8f5e9;color:#2e7d32}
+.feature-arrow{font-size:12px;color:#aaa;transition:transform .2s;margin-left:8px}
+.feature.collapsed .feature-arrow{transform:rotate(-90deg)}
+.feature-body{padding:20px;display:block}
+.feature.collapsed .feature-body{display:none}
+
+.feature-body h4{font-size:13px;font-weight:600;color:#444;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid #f0f0f0}
+.feature-body h4:first-child{margin-top:0}
+.feature-body p,.feature-body li{font-size:13px;line-height:1.7;color:#555}
+.feature-body ul,.feature-body ol{padding-left:20px;margin-bottom:8px}
+.feature-body li{margin-bottom:2px}
+
+/* 메타 테이블 */
+.meta{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-bottom:12px}
+.meta-item{background:#f8f9fa;padding:8px 12px;border-radius:6px}
+.meta-item .label{font-size:10px;color:#888;margin-bottom:2px}
+.meta-item .value{font-size:13px;font-weight:500}
+
+/* 체크리스트 */
+.checklist{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:4px}
+.checklist li{font-size:12px;padding:4px 8px;border-radius:4px}
+.checklist li.checked{background:#e8f5e9;color:#2e7d32}
+.checklist li.unchecked{background:#f5f5f5;color:#aaa}
+.checklist li::before{content:'';display:inline-block;width:12px;height:12px;border:1.5px solid;border-radius:3px;margin-right:6px;vertical-align:middle}
+.checklist li.checked::before{background:#4caf50;border-color:#4caf50;content:'';background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 12 12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.5 6l2.5 2.5 4.5-5' stroke='white' stroke-width='1.5' fill='none'/%3E%3C/svg%3E")}
+.checklist li.unchecked::before{border-color:#ccc}
+
+/* 테이블 공통 */
+.tbl{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px}
+.tbl th{background:#f8f9fa;padding:7px 10px;text-align:left;font-weight:600;color:#555;border-bottom:1px solid #e0e0e0}
+.tbl td{padding:7px 10px;border-bottom:1px solid #f0f0f0}
+.tbl tr:last-child td{border-bottom:none}
+.tbl code{background:#f0f0f0;padding:1px 5px;border-radius:3px;font-size:11px;color:#c62828}
+
+/* 코드블록 */
+.codeblock{background:#1e1e1e;color:#d4d4d4;padding:12px 16px;border-radius:6px;font-family:'Consolas',monospace;font-size:12px;line-height:1.5;overflow-x:auto;margin:8px 0}
+
+/* 뱃지 */
+.badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:600}
+
+/* 인쇄 */
+@media print{.sidebar{display:none}.main{margin-left:0}.feature.collapsed .feature-body{display:block}}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+    <h1>신규 요구사항 정의서</h1>
+    <div class="nav-section">개요</div>
+    <a href="#overview" class="active" onclick="activate(this)">기능 목록</a>
+
+    <div class="nav-section">기능 상세 (7건)</div>
+    <a href="#NEW-001" onclick="activate(this)">NEW-001 대문자 변환 <span class="status s-wait">대기</span></a>
+    <a href="#NEW-002" onclick="activate(this)">NEW-002 AED 디르함 <span class="status s-wait">대기</span></a>
+    <a href="#NEW-003" onclick="activate(this)">NEW-003 IBK 은행 <span class="status s-wait">대기</span></a>
+    <a href="#NEW-004" onclick="activate(this)">NEW-004 이메일 매핑 <span class="status s-wait">대기</span></a>
+    <a href="#NEW-005" onclick="activate(this)">NEW-005 지급기한 태그 <span class="status s-wait">대기</span></a>
+    <a href="#NEW-006" onclick="activate(this)">NEW-006 바지선 검색 <span class="status s-wait">대기</span></a>
+    <a href="#NEW-007" onclick="activate(this)">NEW-007 인쿼리 파싱 <span class="status s-wait">대기</span></a>
+    <a href="#NEW-008" onclick="activate(this)">NEW-008 요청사항 높이 <span class="status s-wait">대기</span></a>
+    <a href="#NEW-009" onclick="activate(this)">NEW-009 검색 매칭 점검 <span class="status s-wait">대기</span></a>
+</nav>
+
+<main class="main">
+
+<h2 id="overview">기능 목록</h2>
+<table class="overview">
+    <tr><th>ID</th><th>기능명</th><th>우선순위</th><th>상태</th><th>관련 테스트</th></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-001</span></td><td>입력값 자동 대문자 변환</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-wait">대기</span></td><td>Orders/, Sales/</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-002</span></td><td>인보이스 AED(디르함) 통화 선택</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>Settlements/</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-003</span></td><td>인보이스 IBK 은행계좌 선택</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>Settlements/</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-004</span></td><td>이메일 주소 자동 매핑</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-wait">대기</span></td><td>Mails/</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-005</span></td><td>지급기한 태그 색상 표시</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-wait">대기</span></td><td>Orders/</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-006</span></td><td>바지선명 검색 개선</td><td><span class="feature-priority p-low">하</span></td><td><span class="status s-wait">대기</span></td><td>Orders/</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-007</span></td><td>인쿼리 텍스트 자동 파싱 → 주문 등록</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>Orders/, Integration/</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-008</span></td><td>요청사항 텍스트 영역 자동 높이 조절</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-009</span></td><td>검색 필드 부분 매칭(%LIKE%) 전체 점검</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-wait">대기</span></td><td>Orders/</td></tr>
+</table>
+
+<!-- ==================== NEW-001 ==================== -->
+<div class="feature" id="NEW-001">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-001</span>
+        <span class="feature-title">입력값 자동 대문자 변환</span>
+        <span class="feature-priority p-mid">중</span>
+        <span class="feature-arrow">▼</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-23</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">우선순위</div><div class="value">중</div></div>
+        </div>
+        <h4>배경/목적</h4>
+        <p>해운업에서 선박명, 항구명, 업체명 등은 관례상 대문자(UPPER CASE)로 작성. 현재는 수동 입력이라 소문자가 섞여 들어가는 경우 많음.</p>
+        <h4>상세 요구사항</h4>
+        <ol>
+            <li>바이어/셀러 관리에서 <strong>저장(PUT/POST) 시</strong> 문자열 필드를 자동 대문자 변환</li>
+            <li><strong>예외 필드</strong>: 담당자명 (이름 원형 유지), 이메일 주소</li>
+            <li><strong>대문자 변환 대상</strong>: 선박명, 항구명, 업체명, 터미널명, 유종명, 메모/비고</li>
+            <li>백엔드 API에서 변환 (저장 시점)</li>
+        </ol>
+        <h4>영향 범위</h4>
+        <ul class="checklist">
+            <li class="checked">바이어 관리 — OrderController PUT/POST</li>
+            <li class="checked">셀러 관리 — SalesOrderController PUT/POST</li>
+            <li class="unchecked">정산 관리</li><li class="unchecked">이메일 시스템</li>
+            <li class="unchecked">업체 관리</li><li class="unchecked">회원 관리</li>
+            <li class="unchecked">DB 스키마 변경</li>
+            <li class="checked">기존 API 수정</li>
+        </ul>
+        <h4>API 설계</h4>
+        <table class="tbl">
+            <tr><th>Method</th><th>Endpoint</th><th>설명</th><th>신규/수정</th></tr>
+            <tr><td>PUT</td><td><code>/api/v2/order</code></td><td>주문 수정 시 대문자 변환</td><td>수정</td></tr>
+            <tr><td>POST</td><td><code>/api/v2/order</code></td><td>주문 등록 시 대문자 변환</td><td>수정</td></tr>
+            <tr><td>PUT</td><td><code>/api/Sales/Order</code></td><td>판매주문 수정 시 대문자 변환</td><td>수정</td></tr>
+            <tr><td>POST</td><td><code>/api/Sales/Order/AddExclusiveReg</code></td><td>판매주문 등록 시 대문자 변환</td><td>수정</td></tr>
+        </table>
+        <h4>참고</h4>
+        <p>한글은 ToUpper() 해도 변화 없으므로 별도 처리 불필요. 이메일 판별: @ 포함 여부. 기존 데이터는 건드리지 않음.</p>
+    </div>
+</div>
+
+<!-- ==================== NEW-002 ==================== -->
+<div class="feature" id="NEW-002">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-002</span>
+        <span class="feature-title">인보이스 AED(디르함) 통화 선택</span>
+        <span class="feature-priority p-high">상</span>
+        <span class="feature-arrow">▼</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-23</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">우선순위</div><div class="value">상</div></div>
+        </div>
+        <h4>배경/목적</h4>
+        <p>아랍권(UAE 등) 거래 시 인보이스를 디르함(AED)으로 발행해야 함. 현재 USD만 지원. 체크박스로 AED 변환 발행 가능해야 함.</p>
+        <h4>상세 요구사항</h4>
+        <ol>
+            <li>인보이스/BDR 생성 화면에 <strong>"AED(디르함) 발행"</strong> 체크박스 추가</li>
+            <li>기본값: <strong>해제</strong> (USD 기본)</li>
+            <li>체크 시: USD → AED 환율 적용 변환 후 발행</li>
+            <li>인보이스 PDF에 통화 단위 표시: USD → AED</li>
+            <li>AED 환율: 고정(3.6725) 또는 실시간 선택</li>
+        </ol>
+        <h4>영향 범위</h4>
+        <ul class="checklist">
+            <li class="unchecked">바이어 관리</li><li class="unchecked">셀러 관리</li>
+            <li class="checked">문서/파일 — 인보이스 PDF 생성 로직</li>
+            <li class="checked">DB 스키마 변경 — 환율 테이블 AED 추가</li>
+            <li class="checked">신규 API — AED 환율 조회</li>
+            <li class="checked">기존 API 수정 — 인보이스 생성 API에 currency 파라미터</li>
+        </ul>
+        <h4>API 설계</h4>
+        <table class="tbl">
+            <tr><th>Method</th><th>Endpoint</th><th>설명</th><th>신규/수정</th></tr>
+            <tr><td>POST</td><td><code>/api/invoice/Generate</code></td><td>currency 파라미터 추가 (USD/AED)</td><td>수정</td></tr>
+            <tr><td>POST</td><td><code>/api/invoice/PreviewOrder</code></td><td>currency 파라미터 추가</td><td>수정</td></tr>
+            <tr><td>GET</td><td><code>/api/etc/ExchangeRate</code></td><td>AED 환율 지원 추가</td><td>수정</td></tr>
+        </table>
+        <h4>참고</h4>
+        <p>USD/AED 고정환율: 1 USD = 3.6725 AED (UAE 페그제). 큰 변동 없음.</p>
+    </div>
+</div>
+
+<!-- ==================== NEW-003 ==================== -->
+<div class="feature" id="NEW-003">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-003</span>
+        <span class="feature-title">인보이스 IBK 은행계좌 선택</span>
+        <span class="feature-priority p-high">상</span>
+        <span class="feature-arrow">▼</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-23</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">우선순위</div><div class="value">상</div></div>
+        </div>
+        <h4>배경/목적</h4>
+        <p>인보이스 은행 정보가 하나은행 고정. 홍콩이마린 거래 시 수동으로 IBK로 변경 중. 체크박스로 선택해야 함.</p>
+        <h4>상세 요구사항</h4>
+        <ol>
+            <li><strong>"IBK 계좌로 발행"</strong> 체크박스 추가 (기본: 하나은행)</li>
+            <li>IBK 정보: Account <code>054-160034-56-00011</code>, Bank <code>Industrial Bank of Korea</code>, SWIFT <code>IBKOKRSEXXX</code></li>
+            <li>향후 은행 추가 가능하도록 <strong>BankAccount 테이블</strong> 신설</li>
+        </ol>
+        <h4>영향 범위</h4>
+        <ul class="checklist">
+            <li class="checked">문서/파일 — 인보이스 PDF 은행 정보 동적 변경</li>
+            <li class="checked">DB 스키마 변경 — BankAccount 테이블 신설</li>
+            <li class="checked">기존 API 수정 — bankAccountId 파라미터 추가</li>
+        </ul>
+        <h4>DB 변경</h4>
+        <table class="tbl">
+            <tr><th>테이블</th><th>컬럼</th><th>타입</th><th>설명</th></tr>
+            <tr><td>BankAccount</td><td>BankAccountId</td><td>int (PK)</td><td>ID</td></tr>
+            <tr><td>BankAccount</td><td>BankName</td><td>nvarchar(64)</td><td>은행명</td></tr>
+            <tr><td>BankAccount</td><td>AccountNumber</td><td>varchar(32)</td><td>계좌번호</td></tr>
+            <tr><td>BankAccount</td><td>SwiftCode</td><td>varchar(16)</td><td>SWIFT 코드</td></tr>
+            <tr><td>BankAccount</td><td>IsDefault</td><td>bit</td><td>기본 계좌 여부</td></tr>
+            <tr><td>BankAccount</td><td>Label</td><td>nvarchar(32)</td><td>표시명</td></tr>
+        </table>
+        <h4>초기 데이터</h4>
+        <table class="tbl">
+            <tr><th>Label</th><th>BankName</th><th>AccountNumber</th><th>SwiftCode</th><th>Default</th></tr>
+            <tr><td>하나은행</td><td>KEB Hana Bank</td><td>(현재 계좌)</td><td>(현재 SWIFT)</td><td>Y</td></tr>
+            <tr><td>IBK</td><td>Industrial Bank of Korea</td><td>054-160034-56-00011</td><td>IBKOKRSEXXX</td><td>N</td></tr>
+        </table>
+    </div>
+</div>
+
+<!-- ==================== NEW-004 ==================== -->
+<div class="feature" id="NEW-004">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-004</span>
+        <span class="feature-title">이메일 주소 자동 매핑</span>
+        <span class="feature-priority p-mid">중</span>
+        <span class="feature-arrow">▼</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-23</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">우선순위</div><div class="value">중</div></div>
+        </div>
+        <h4>배경/목적</h4>
+        <p>메일 발송 시 수신자/참조 이메일을 수동 입력 중. 주문업체명+선박명으로 검색하여 이메일을 자동으로 가져오고 업체/회원 정보에 반영해야 함.</p>
+        <h4>현재 이메일 DB 구조</h4>
+        <table class="tbl">
+            <tr><th>위치</th><th>필드</th><th>설명</th></tr>
+            <tr><td>ManagedCompany</td><td>ContactEmail</td><td>업체 연락 이메일 (필수)</td></tr>
+            <tr><td>ManagedCompany</td><td>RepresentEmail</td><td>대표자 이메일</td></tr>
+            <tr><td>ManagedCompany</td><td>SupportEmail</td><td>서포트 이메일</td></tr>
+            <tr><td>UserAccount</td><td>Email</td><td>사용자 이메일 (필수)</td></tr>
+            <tr><td>OrderOilSupplier</td><td>OilSalesManagerEmail</td><td>공급사 담당자</td></tr>
+            <tr><td>OrderOilSupplier</td><td>BargeManagerEmail</td><td>바지 담당자</td></tr>
+        </table>
+        <h4>상세 요구사항</h4>
+        <ol>
+            <li>메일 발송 화면에서 <strong>주문업체명+선박명</strong> 기준으로 이메일 이력 자동 조회</li>
+            <li>조회된 이메일을 To, CC에 자동 채움</li>
+            <li>새 이메일 발견 시 업체/회원 정보에 업데이트</li>
+            <li>벙커 아카이브 연동: 방식 확인 필요 (API? DB? 크롤링?)</li>
+        </ol>
+        <h4>영향 범위</h4>
+        <ul class="checklist">
+            <li class="checked">바이어 관리</li><li class="checked">셀러 관리</li>
+            <li class="checked">이메일 시스템</li><li class="checked">업체 관리</li>
+            <li class="checked">회원 관리</li><li class="checked">DB 스키마 변경</li>
+            <li class="checked">신규 API</li><li class="checked">기존 API 수정</li>
+        </ul>
+        <h4>참고</h4>
+        <p>1차: 내부 이메일 이력(EmailRelatedToOrder)에서 추출. 2차: 벙커 아카이브 외부 연동.</p>
+    </div>
+</div>
+
+<!-- ==================== NEW-005 ==================== -->
+<div class="feature" id="NEW-005">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-005</span>
+        <span class="feature-title">지급기한 태그 색상 표시</span>
+        <span class="feature-priority p-mid">중</span>
+        <span class="feature-arrow">▼</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-23</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">우선순위</div><div class="value">중</div></div>
+        </div>
+        <h4>배경/목적</h4>
+        <p>지급기한(PayDueDate)이 언제인지 한눈에 파악하기 어려움. 태그 형태로 날짜를 표시하고 기한 임박 시 색상 경고 필요.</p>
+        <h4>색상 규칙</h4>
+        <table class="tbl">
+            <tr><th>조건</th><th>색상</th><th>예시</th></tr>
+            <tr><td>3일 이상 여유</td><td style="background:#e0e0e0;text-align:center;border-radius:4px">회색</td><td><span style="background:#e0e0e0;padding:2px 10px;border-radius:10px;font-size:12px">3/28</span></td></tr>
+            <tr><td>2일 전</td><td style="background:#FFF3CD;text-align:center;border-radius:4px">노란색</td><td><span style="background:#FFF3CD;padding:2px 10px;border-radius:10px;font-size:12px">3/25</span></td></tr>
+            <tr><td>1일 전</td><td style="background:#FFE0B2;text-align:center;border-radius:4px">주황색</td><td><span style="background:#FFE0B2;padding:2px 10px;border-radius:10px;font-size:12px">3/24</span></td></tr>
+            <tr><td>당일 (D-Day)</td><td style="background:#FFCDD2;text-align:center;border-radius:4px">빨간색</td><td><span style="background:#FFCDD2;padding:2px 10px;border-radius:10px;font-size:12px">3/23</span></td></tr>
+            <tr><td>기한 초과</td><td style="background:#EF5350;color:#fff;text-align:center;border-radius:4px">진한 빨강</td><td><span style="background:#EF5350;color:#fff;padding:2px 10px;border-radius:10px;font-size:12px">3/20</span></td></tr>
+        </table>
+        <h4>영향 범위</h4>
+        <ul class="checklist">
+            <li class="checked">바이어 관리 — OrderList.razor 태그 추가</li>
+            <li class="checked">셀러 관리 — SalesOrderList.razor 태그 추가</li>
+        </ul>
+        <h4>참고</h4>
+        <p>결제 완료된 건(PayCompleteDate 있으면)은 태그 표시 안 함. SngPayDueTag.razor 컴포넌트 신규 생성.</p>
+    </div>
+</div>
+
+<!-- ==================== NEW-006 ==================== -->
+<div class="feature" id="NEW-006">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-006</span>
+        <span class="feature-title">바지선명 검색 개선</span>
+        <span class="feature-priority p-low">하</span>
+        <span class="feature-arrow">▼</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-23</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">우선순위</div><div class="value">하</div></div>
+        </div>
+        <h4>코드 분석 결과</h4>
+        <p>현재 검색 로직 (OrdersController.cs:428):</p>
+        <div class="codeblock">Ship.ShipName.Contains(bargeShipName)  // = SQL %LIKE%</div>
+        <p><strong>코드 자체는 맞음.</strong> 추정 원인:</p>
+        <ol>
+            <li>Ship 테이블에 해당 바지선이 <code>ShipType="BARGE"</code>로 등록 안 되어 있을 수 있음</li>
+            <li><code>OrderOilSupplier.BargeShipId</code>가 null이면 매핑 안 됨</li>
+            <li>비활성화(<code>IsActivated</code>) 필터로 걸러질 수 있음</li>
+        </ol>
+        <h4>해결 방안</h4>
+        <ol>
+            <li>DB에서 바지선 데이터 상태 확인 필요</li>
+            <li>검색 결과 0건 시 <code>OrderOilSupplier.BargeShipName</code> (비정규화 필드) fallback 검색 추가</li>
+        </ol>
+        <h4>영향 범위</h4>
+        <ul class="checklist">
+            <li class="checked">바이어 관리 — OrdersController 검색 로직</li>
+            <li class="checked">셀러 관리 — SalesOrdersController 검색 로직</li>
+            <li class="checked">기존 API 수정</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ==================== NEW-007 ==================== -->
+<div class="feature" id="NEW-007">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-007</span>
+        <span class="feature-title">인쿼리 텍스트 자동 파싱 → 주문 등록</span>
+        <span class="feature-priority p-high">상</span>
+        <span class="feature-arrow">▼</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-23</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">우선순위</div><div class="value">상</div></div>
+        </div>
+        <h4>배경/목적</h4>
+        <p>인쿼리 텍스트를 보고 수동으로 바이어/셀러 주문을 등록 중. 자동 파싱하여 주문을 자동 생성해야 함.</p>
+        <h4>입력 예시</h4>
+        <div class="codeblock">VESSEL NAME: TONG RUN 7
+IMO : 9673563
+DELIVERY PORT/AREA NAME: BUSAN
+DELIVERY WINDOW: 16-20TH MAR 2026
+VLSFO : 55~100MT
+LSMGO : 22~200MT
+바이어 : HONGKONG E-MARINE ... 1370/1620+500 (30DDD)
+셀러 : KEUMJIN MARINE ... 1290/1540+500 (7DDD)
+AGENT : GLOBAL OFFSHORE MARINE SERVICE</div>
+        <h4>파싱 매핑</h4>
+        <table class="tbl">
+            <tr><th>텍스트 키</th><th>매핑 대상</th><th>비고</th></tr>
+            <tr><td>VESSEL NAME</td><td>Ship.ShipName</td><td>DB 부분 매칭</td></tr>
+            <tr><td>IMO</td><td>Ship.Imo</td><td>정확 일치</td></tr>
+            <tr><td>DELIVERY PORT</td><td>OrderInfo.PortName</td><td>DB 부분 매칭</td></tr>
+            <tr><td>DELIVERY WINDOW</td><td>ReqSupplyStartDate ~ EndDate</td><td>날짜 파싱</td></tr>
+            <tr><td>VLSFO, LSMGO 등</td><td>OrderOil (유종+수량)</td><td>55~100MT → Min/Max</td></tr>
+            <tr><td>바이어</td><td>ShipCompany</td><td>부분 매칭 + 단가/결제조건</td></tr>
+            <tr><td>셀러</td><td>OilSalesCompany</td><td>부분 매칭 + 단가/결제조건</td></tr>
+            <tr><td>AGENT</td><td>Agent</td><td>부분 매칭</td></tr>
+        </table>
+        <h4>단가/결제조건 파싱</h4>
+        <div class="codeblock">1370/1620+500 (30DDD)
+├─ 1370  → 첫 번째 유종(VLSFO) BuyPrice
+├─ 1620  → 두 번째 유종(LSMGO) BuyPrice
+├─ +500  → AddPay (부대비용)
+└─ 30DDD → PayType (30일 결제)</div>
+        <h4>처리 순서</h4>
+        <ol>
+            <li>텍스트 입력</li>
+            <li>파싱 → 구조화된 데이터로 변환</li>
+            <li>DB 매칭 (업체, 선박, 항구, 유종 부분 매칭)</li>
+            <li>미리보기 표시 (매칭 결과 + 미매칭 하이라이트)</li>
+            <li>사용자 확인/수정</li>
+            <li><strong>바이어 주문 생성</strong> (POST /api/order/OrderForAdmin)</li>
+            <li><strong>셀러 주문 생성</strong> (POST /api/Sales/Order/AddExclusiveReg) — 바이어 OrderInfoId 연결</li>
+        </ol>
+        <h4>영향 범위</h4>
+        <ul class="checklist">
+            <li class="checked">바이어 관리 — 주문 자동 등록</li>
+            <li class="checked">셀러 관리 — 판매주문 자동 등록</li>
+            <li class="checked">업체 관리 — 업체 매칭 조회</li>
+            <li class="checked">회원 관리 — 담당자 매칭 조회</li>
+            <li class="checked">견적(RFQ) — 인쿼리 입력 화면</li>
+            <li class="checked">신규 API</li>
+            <li class="checked">기존 API 수정</li>
+        </ul>
+        <h4>API 설계</h4>
+        <table class="tbl">
+            <tr><th>Method</th><th>Endpoint</th><th>설명</th><th>신규/수정</th></tr>
+            <tr><td>POST</td><td><code>/api/inquiry/Parse</code></td><td>텍스트 파싱 → 구조화 데이터</td><td>신규</td></tr>
+            <tr><td>POST</td><td><code>/api/inquiry/Match</code></td><td>DB 매칭 (업체/선박/유종)</td><td>신규</td></tr>
+            <tr><td>POST</td><td><code>/api/inquiry/CreateOrders</code></td><td>바이어+셀러 주문 자동 생성</td><td>신규</td></tr>
+        </table>
+        <h4>참고</h4>
+        <p>파싱은 정규식 기반. "중간까지만 맞으면" 매칭 → Contains 또는 유사도 비교. Naver HyperX AI 활용 고려 가능. 반드시 <strong>바이어 먼저 → 셀러는 OrderInfoId 연결</strong>.</p>
+    </div>
+</div>
+
+<!-- ==================== NEW-008 ==================== -->
+<div class="feature" id="NEW-008">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-008</span>
+        <span class="feature-title">요청사항 텍스트 영역 자동 높이 조절</span>
+        <span class="feature-priority p-mid">중</span>
+        <span class="feature-arrow">▼</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-24</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">우선순위</div><div class="value">중</div></div>
+            <div class="meta-item"><div class="label">담당</div><div class="value">A 개발자</div></div>
+        </div>
+        <h4>배경/목적</h4>
+        <p>바이어/셀러 관리 화면에서 요청사항(RequestMemo) 입력 시 고정 높이에 스크롤이 생김. 입력한 만큼 영역이 자동으로 늘어나야 내용 전체가 한눈에 보임.</p>
+        <h4>상세 요구사항</h4>
+        <ol>
+            <li>요청사항 텍스트 입력 영역을 <strong>내용에 따라 자동 확장</strong>으로 변경</li>
+            <li>스크롤 없이 입력한 텍스트 전체가 보여야 함</li>
+            <li>최소 높이는 현재와 동일 유지</li>
+            <li>OrderList.razor, SalesOrderList.razor 양쪽 모두 적용</li>
+        </ol>
+        <h4>영향 범위</h4>
+        <ul class="checklist">
+            <li class="checked">바이어 관리 — OrderList.razor</li>
+            <li class="checked">셀러 관리 — SalesOrderList.razor</li>
+        </ul>
+        <h4>참고</h4>
+        <p>프론트만 수정, 백엔드 변경 없음. MudBlazor AutoGrow 또는 CSS/JS auto-resize 활용.</p>
+    </div>
+</div>
+
+<!-- ==================== NEW-009 ==================== -->
+<div class="feature" id="NEW-009">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-009</span>
+        <span class="feature-title">검색 필드 부분 매칭(%LIKE%) 전체 점검</span>
+        <span class="feature-priority p-mid">중</span>
+        <span class="feature-arrow">▼</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-24</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">우선순위</div><div class="value">중</div></div>
+            <div class="meta-item"><div class="label">담당</div><div class="value">A 개발자</div></div>
+        </div>
+        <h4>배경/목적</h4>
+        <p>일부 검색 필드가 정확 일치(==)로 되어있어 부분 검색이 안 됨. 텍스트 검색은 모두 Contains()(%LIKE%)로 동작해야 함.</p>
+        <h4>코드 분석 결과</h4>
+        <table class="tbl">
+            <tr><th>검색 필드</th><th>현재 방식</th><th>문제</th></tr>
+            <tr><td>주문번호</td><td><code>Contains()</code> %LIKE%</td><td style="color:#2e7d32">정상</td></tr>
+            <tr><td>선사명</td><td><code>Contains()</code> %LIKE%</td><td style="color:#2e7d32">정상</td></tr>
+            <tr><td>선박명</td><td><code>Contains()</code> %LIKE%</td><td style="color:#2e7d32">정상</td></tr>
+            <tr style="background:#fff5f5"><td><strong>항구명</strong></td><td><code>== portName</code> 정확 일치</td><td style="color:#c62828"><strong>부분 검색 안 됨</strong></td></tr>
+            <tr><td>에이전트명</td><td><code>Contains()</code> %LIKE%</td><td style="color:#2e7d32">정상</td></tr>
+            <tr><td>바지업체명</td><td><code>Contains()</code> %LIKE%</td><td style="color:#2e7d32">정상</td></tr>
+            <tr><td>바지선명</td><td><code>Contains()</code> (Ship 테이블)</td><td style="color:#e65100">데이터 누락 가능 (NEW-006)</td></tr>
+            <tr><td>터미널명</td><td><code>Contains()</code> %LIKE%</td><td style="color:#2e7d32">정상</td></tr>
+            <tr><td>유종구매타입</td><td><code>==</code> 정확 일치</td><td style="color:#2e7d32">정상 (드롭다운)</td></tr>
+            <tr><td>급유방식</td><td><code>==</code> 정확 일치</td><td style="color:#2e7d32">정상 (드롭다운)</td></tr>
+            <tr><td>결제방식</td><td><code>==</code> 정확 일치</td><td style="color:#2e7d32">정상 (드롭다운)</td></tr>
+        </table>
+        <h4>수정 대상</h4>
+        <table class="tbl">
+            <tr><th>파일</th><th>줄</th><th>현재</th><th>변경</th></tr>
+            <tr><td>OrdersController.cs</td><td>400</td><td><code>order.PortName == portName</code></td><td><code>order.PortName.Contains(portName)</code></td></tr>
+            <tr><td>SalesOrdersController.cs</td><td>515</td><td><code>order.OrderInfo.PortName == portName</code></td><td><code>order.OrderInfo.PortName.Contains(portName)</code></td></tr>
+        </table>
+        <h4>영향 범위</h4>
+        <ul class="checklist">
+            <li class="checked">바이어 관리 — OrdersController 검색 쿼리</li>
+            <li class="checked">셀러 관리 — SalesOrdersController 검색 쿼리</li>
+            <li class="checked">기존 API 수정</li>
+        </ul>
+        <h4>참고</h4>
+        <p>NEW-006(바지선명 검색)과 같이 진행하면 효율적. 규칙: 텍스트 입력 → Contains, 드롭다운 선택 → 정확 일치.</p>
+    </div>
+</div>
+
+</main>
+
+<script>
+function activate(el) {
+    document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+    el.classList.add('active');
+}
+// URL 해시로 자동 스크롤
+if (location.hash) {
+    const el = document.querySelector(location.hash);
+    if (el) { el.scrollIntoView(); el.classList.remove('collapsed'); }
+}
+</script>
+</body>
+</html>
