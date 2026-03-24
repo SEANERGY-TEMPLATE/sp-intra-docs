@@ -386,57 +386,198 @@ a{color:#4361ee;text-decoration:none}
             <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-23</div></div>
             <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
             <div class="meta-item"><div class="label">우선순위</div><div class="value">상</div></div>
+            <div class="meta-item"><div class="label">담당</div><div class="value">B 개발자</div></div>
         </div>
         <h4>배경/목적</h4>
         <p>인쿼리 텍스트를 보고 수동으로 바이어/셀러 주문을 등록 중. 자동 파싱하여 주문을 자동 생성해야 함.</p>
-        <h4>입력 예시</h4>
-        <div class="codeblock">VESSEL NAME: TONG RUN 7
-IMO : 9673563
-DELIVERY PORT/AREA NAME: BUSAN
-DELIVERY WINDOW: 16-20TH MAR 2026
-VLSFO : 55~100MT
-LSMGO : 22~200MT
-바이어 : HONGKONG E-MARINE ... 1370/1620+500 (30DDD)
-셀러 : KEUMJIN MARINE ... 1290/1540+500 (7DDD)
-AGENT : GLOBAL OFFSHORE MARINE SERVICE</div>
-        <h4>파싱 매핑</h4>
-        <table class="tbl">
-            <tr><th>텍스트 키</th><th>매핑 대상</th><th>비고</th></tr>
-            <tr><td>VESSEL NAME</td><td>Ship.ShipName</td><td>DB 부분 매칭</td></tr>
-            <tr><td>IMO</td><td>Ship.Imo</td><td>정확 일치</td></tr>
-            <tr><td>DELIVERY PORT</td><td>OrderInfo.PortName</td><td>DB 부분 매칭</td></tr>
-            <tr><td>DELIVERY WINDOW</td><td>ReqSupplyStartDate ~ EndDate</td><td>날짜 파싱</td></tr>
-            <tr><td>VLSFO, LSMGO 등</td><td>OrderOil (유종+수량)</td><td>55~100MT → Min/Max</td></tr>
-            <tr><td>바이어</td><td>ShipCompany</td><td>부분 매칭 + 단가/결제조건</td></tr>
-            <tr><td>셀러</td><td>OilSalesCompany</td><td>부분 매칭 + 단가/결제조건</td></tr>
-            <tr><td>AGENT</td><td>Agent</td><td>부분 매칭</td></tr>
-        </table>
-        <h4>단가/결제조건 파싱</h4>
-        <div class="codeblock">1370/1620+500 (30DDD)
-├─ 1370  → 첫 번째 유종(VLSFO) BuyPrice
-├─ 1620  → 두 번째 유종(LSMGO) BuyPrice
-├─ +500  → AddPay (부대비용)
-└─ 30DDD → PayType (30일 결제)</div>
+
         <h4>처리 순서</h4>
         <ol>
-            <li>텍스트 입력</li>
+            <li>텍스트 입력 (붙여넣기)</li>
             <li>파싱 → 구조화된 데이터로 변환</li>
-            <li>DB 매칭 (업체, 선박, 항구, 유종 부분 매칭)</li>
+            <li>DB 매칭 (업체관리/회원관리에 있는 것만)</li>
             <li>미리보기 표시 (매칭 결과 + 미매칭 하이라이트)</li>
             <li>사용자 확인/수정</li>
             <li><strong>바이어 주문 생성</strong> (POST /api/order/OrderForAdmin)</li>
             <li><strong>셀러 주문 생성</strong> (POST /api/Sales/Order/AddExclusiveReg) — 바이어 OrderInfoId 연결</li>
         </ol>
+
+        <h4>기본 스펙 매핑 (스펙 미명시 시 2010 기준 자동 적용)</h4>
+        <table class="tbl">
+            <tr><th>입력</th><th>OilName</th><th>기본 스펙</th></tr>
+            <tr><td>VLSFO</td><td>VLSFO</td><td>ISO 8217:2010 RMG 380 Max 0.5% S</td></tr>
+            <tr><td>VLSFO 120VIS/CST</td><td>VLSFO</td><td>ISO 8217:2010 RMG 380 Max 0.5% S, Max 120 Vis.</td></tr>
+            <tr><td>VLSFO 180VIS/CST</td><td>VLSFO</td><td>ISO 8217:2010 RMG 380 Max 0.5% S, Max 180 Vis.</td></tr>
+            <tr><td>HSFO / HSFO 380CST</td><td>HSFO</td><td>ISO 8217:2010 RMG 380 Max 3.5% S</td></tr>
+            <tr><td>HSFO 500CST</td><td>HSFO</td><td>ISO 8217:2010 RMK 500 Max 3.5% S</td></tr>
+            <tr><td>HSFO 700CST</td><td>HSFO</td><td>ISO 8217:2010 RMK 700 Max 3.5% S</td></tr>
+            <tr><td>LSMGO</td><td>LSMGO</td><td>ISO 8217:2010 DMA Max 0.1% S</td></tr>
+            <tr><td>LSMGO 0.5%</td><td>LSMGO</td><td>ISO 8217:2010 DMA Max 0.5% S</td></tr>
+            <tr><td>MGO / MDO</td><td>LSMGO</td><td>ISO 8217:2010 DMA Max 0.1% S</td></tr>
+        </table>
+
+        <h4>업체명 매핑 (한국어 약칭 → 영문)</h4>
+        <table class="tbl">
+            <tr><th>한국어</th><th>영문 정식명</th></tr>
+            <tr><td>홍콩이마린</td><td>HONGKONG E-MARINE SUPPLY SERVICE CORP., LTD.</td></tr>
+            <tr><td>금진</td><td>KEUMJIN MARINE CO., LTD.</td></tr>
+            <tr><td>동림</td><td>DONGRIM TRADING CO., LTD.</td></tr>
+            <tr><td>프라임</td><td>PRIME BUNKER CO., LTD.</td></tr>
+            <tr><td>로인스</td><td>Roins</td></tr>
+            <tr><td>글로벌오프쇼어</td><td>GLOBAL OFFSHORE MARINE SERVICE</td></tr>
+            <tr><td>코모션</td><td>COMOCEAN SHIPPING DMCC</td></tr>
+            <tr><td>파노코</td><td>PANOCO KOREA CO., LTD.</td></tr>
+        </table>
+        <p style="font-size:12px;color:#888">매핑에 없으면 업체관리 DB에서 Contains 부분 매칭</p>
+
+        <h4>단가/결제조건 파싱</h4>
+        <table class="tbl">
+            <tr><th>유종 수</th><th>부대비용</th><th>예시</th></tr>
+            <tr><td>1개</td><td>없음</td><td><code>1400 (30DDD)</code></td></tr>
+            <tr><td>1개</td><td>있음</td><td><code>1400+500 (30DDD)</code></td></tr>
+            <tr><td>2개</td><td>없음</td><td><code>1370/1620 (30DDD)</code></td></tr>
+            <tr><td>2개</td><td>있음</td><td><code>1370/1620+500 (30DDD)</code></td></tr>
+            <tr><td>3개</td><td>없음</td><td><code>1400/1650/1800 (30DDD)</code></td></tr>
+            <tr><td>3개</td><td>있음</td><td><code>1400/1650/1800+500 (30DDD)</code></td></tr>
+        </table>
+        <p style="font-size:12px;color:#555">단가 슬래시(/) 순서 = 유종 나열 순서</p>
+
+        <h4>결제조건</h4>
+        <table class="tbl">
+            <tr><th>형식</th><th>의미</th></tr>
+            <tr><td><code>숫자DDD</code></td><td>공급 후 N일 결제 (7, 15, 30, 45, 60, 90 등 숫자 자유)</td></tr>
+            <tr><td><code>CIA</code></td><td>Cash In Advance - 공급 전 선결제</td></tr>
+            <tr><td><code>COD</code></td><td>Cash On Delivery - 공급 완료 즉시 송금</td></tr>
+        </table>
+
+        <h4>에이전트 정보 (4개 필드 각각 독립, 없으면 NULL)</h4>
+        <table class="tbl">
+            <tr><th>필드</th><th>파싱 키워드</th><th>NULL 가능</th></tr>
+            <tr><td>업체명</td><td><code>AGENT</code> / <code>에이전트</code></td><td>O</td></tr>
+            <tr><td>전화번호</td><td><code>T.</code> / <code>TEL</code></td><td>O</td></tr>
+            <tr><td>이메일</td><td><code>E-mail</code> / <code>EMAIL</code></td><td>O</td></tr>
+            <tr><td>담당자명</td><td><code>MR.</code> / <code>MS.</code> (뒤 전체 텍스트)</td><td>O</td></tr>
+        </table>
+
+        <h4>NULL 가능 필드 전체</h4>
+        <table class="tbl">
+            <tr><th>필드</th><th>필수</th><th>NULL시</th></tr>
+            <tr><td>VESSEL NAME, IMO, PORT, DELIVERY WINDOW</td><td>O</td><td>-</td></tr>
+            <tr><td>유종 (최소 1개), 바이어, 셀러</td><td>O</td><td>-</td></tr>
+            <tr><td>서플, AGENT, T., E-mail, MR./MS., 비고</td><td></td><td>안 넣음</td></tr>
+        </table>
+
+        <h4>예시 (15개)</h4>
+        <details><summary style="cursor:pointer;color:#4361ee;font-size:13px;font-weight:600">예시 1: 기본 (유종 2개, 풀 정보)</summary>
+        <div class="codeblock">VESSEL NAME: TONG RUN 7
+IMO : 9673563
+DELIVERY PORT/AREA NAME: BUSAN
+DELIVERY WINDOW: 16-20TH MAR 2026
+VLSFO : 55MT
+LSMGO : 22MT
+바이어 : HONGKONG E-MARINE SUPPLY SERVICE CORP., LTD. 1370/1620+500 (30DDD)
+셀러 : KEUMJIN MARINE CO., LTD. 1290/1540+500 (7DDD)
+서플 : Roins
+AGENT : GLOBAL OFFSHORE MARINE SERVICE
+T.+82 51 715 9679
+E-mail : ops@globaloms.co.kr
+MR. SONG, HYO SUNG</div></details>
+
+        <details><summary style="cursor:pointer;color:#4361ee;font-size:13px;font-weight:600">예시 2: 유종 3개 + VIS 스펙 + 부대비용</summary>
+        <div class="codeblock">VESSEL NAME: XIN SHENG SHENG 6
+IMO : 8358013
+DELIVERY PORT/AREA NAME: YOSU
+DELIVERY WINDOW: 01-03RD AUG 2026
+HSFO 380CST : 200MT
+VLSFO 180VIS : 55~100MT
+LSMGO 0.1% : 22~50MT
+바이어 : 홍콩이마린 1400/1650/1800+500 (30DDD)
+셀러 : 동림 1300/1550/1700+500 (7DDD)
+서플 : Roins
+AGENT : GLOBAL OFFSHORE MARINE SERVICE
+T.+82 51 715 9679
+E-mail : ops@globaloms.co.kr
+MR. SONG, HYO SUNG</div></details>
+
+        <details><summary style="cursor:pointer;color:#4361ee;font-size:13px;font-weight:600">예시 3: 유종 3개 + 부대비용 없음</summary>
+        <div class="codeblock">VESSEL NAME: STAR EXPLORER
+IMO : 9887766
+DELIVERY PORT/AREA NAME: SINGAPORE
+DELIVERY WINDOW: 10-15TH JUN 2026
+HSFO : 300MT
+VLSFO : 100~150MT
+LSMGO : 30MT
+바이어 : 프라임 1200/1500/1700 (45DDD)
+셀러 : 금진 1100/1400/1600 (15DDD)</div></details>
+
+        <details><summary style="cursor:pointer;color:#4361ee;font-size:13px;font-weight:600">예시 4: 에이전트/서플 없음 (NULL)</summary>
+        <div class="codeblock">VESSEL NAME: PACIFIC STAR
+IMO : 9512345
+DELIVERY PORT/AREA NAME: FUJAIRAH
+DELIVERY WINDOW: 05-10TH APR 2026
+VLSFO 0.5% : 150MT
+LSMGO 0.1% : 30MT
+바이어 : 프라임 1500/1700 (15DDD)
+셀러 : KEUMJIN MARINE CO., LTD. 1400/1600 (7DDD)</div></details>
+
+        <details><summary style="cursor:pointer;color:#4361ee;font-size:13px;font-weight:600">예시 5: 한국어 약칭</summary>
+        <div class="codeblock">VESSEL NAME: OCEAN GRACE
+IMO : 9876543
+DELIVERY PORT/AREA NAME: BUSAN
+DELIVERY WINDOW: 20-25TH MAR 2026
+HSFO 380CST : 300~500MT
+VLSFO : 100MT
+바이어 : 홍콩이마린 1370/1620+500 (30DDD)
+셀러 : 금진 1290/1540+500 (7DDD)
+서플 : 로인스</div></details>
+
+        <details><summary style="cursor:pointer;color:#4361ee;font-size:13px;font-weight:600">예시 6: 유종 1개</summary>
+        <div class="codeblock">VESSEL NAME: SEA PIONEER
+IMO : 9334567
+DELIVERY PORT/AREA NAME: BUSAN
+DELIVERY WINDOW: 10-12TH APR 2026
+VLSFO 0.5% : 100MT
+바이어 : 홍콩이마린 1400 (30DDD)
+셀러 : 금진 1300 (7DDD)</div></details>
+
+        <details><summary style="cursor:pointer;color:#4361ee;font-size:13px;font-weight:600">예시 7: 유종 1개 + 부대비용</summary>
+        <div class="codeblock">VESSEL NAME: BRAVE SAILOR
+IMO : 9667788
+DELIVERY PORT/AREA NAME: YOSU
+DELIVERY WINDOW: 01-05TH APR 2026
+VLSFO : 200MT
+바이어 : 홍콩이마린 1400+500 (60DDD)
+셀러 : 동림 1300+500 (7DDD)</div></details>
+
+        <details><summary style="cursor:pointer;color:#4361ee;font-size:13px;font-weight:600">예시 8~15: 영문키워드/700CST/비고/CIA/COD/에이전트변형 등</summary>
+        <div class="codeblock">-- 예시 8: 영문 키워드 --
+BUYER : HONGKONG E-MARINE ... 1400/1650 (30DDD)
+SELLER : KEUMJIN MARINE ... 1300/1550 (7DDD)
+SUPPLIER : Roins
+
+-- 예시 9: HSFO 700CST --
+HSFO 700CST : 500MT
+
+-- 예시 13: CIA --
+바이어 : COMOCEAN SHIPPING DMCC 1500 (CIA)
+
+-- 예시 14: COD --
+바이어 : 홍콩이마린 1400/1650 (COD)
+
+-- 예시 15: 90DDD --
+바이어 : 홍콩이마린 1200/1500/1700+500 (90DDD)</div></details>
+
         <h4>영향 범위</h4>
         <ul class="checklist">
             <li class="checked">바이어 관리 — 주문 자동 등록</li>
             <li class="checked">셀러 관리 — 판매주문 자동 등록</li>
-            <li class="checked">업체 관리 — 업체 매칭 조회</li>
-            <li class="checked">회원 관리 — 담당자 매칭 조회</li>
-            <li class="checked">견적(RFQ) — 인쿼리 입력 화면</li>
-            <li class="checked">신규 API</li>
-            <li class="checked">기존 API 수정</li>
+            <li class="checked">업체 관리 — 매칭 조회 + 매핑 테이블</li>
+            <li class="checked">회원 관리 — 담당자 매칭</li>
+            <li class="checked">견적(RFQ) — 입력 화면</li>
+            <li class="checked">DB 스키마 변경 — CompanyAlias 테이블</li>
+            <li class="checked">신규 API — Parse, Match, CreateOrders</li>
         </ul>
+
         <h4>API 설계</h4>
         <table class="tbl">
             <tr><th>Method</th><th>Endpoint</th><th>설명</th><th>신규/수정</th></tr>
@@ -444,8 +585,9 @@ AGENT : GLOBAL OFFSHORE MARINE SERVICE</div>
             <tr><td>POST</td><td><code>/api/inquiry/Match</code></td><td>DB 매칭 (업체/선박/유종)</td><td>신규</td></tr>
             <tr><td>POST</td><td><code>/api/inquiry/CreateOrders</code></td><td>바이어+셀러 주문 자동 생성</td><td>신규</td></tr>
         </table>
+
         <h4>참고</h4>
-        <p>파싱은 정규식 기반. "중간까지만 맞으면" 매칭 → Contains 또는 유사도 비교. Naver HyperX AI 활용 고려 가능. 반드시 <strong>바이어 먼저 → 셀러는 OrderInfoId 연결</strong>.</p>
+        <p>정규식 기반 파싱. 업체명: 한국어 매핑 우선 → 없으면 DB Contains. 반드시 <strong>바이어 먼저 → 셀러는 OrderInfoId 연결</strong>.</p>
     </div>
 </div>
 
