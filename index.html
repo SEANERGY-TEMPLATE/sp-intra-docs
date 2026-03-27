@@ -105,7 +105,7 @@ a{color:#4361ee;text-decoration:none}
     <a href="#NEW-010" onclick="activate(this)">NEW-010 BDR 선박명 삭제 <span class="status s-wait">대기</span></a>
     <a href="#NEW-011" onclick="activate(this)">NEW-011 아랍권 인보이스 2건 <span class="status s-wait">대기</span></a>
     <a href="#NEW-012" onclick="activate(this)">NEW-012 발행완료 처리 <span class="status s-wait">대기</span></a>
-    <a href="#NEW-013" onclick="activate(this)">NEW-013 DDD 자동 계산 <span class="status s-wait">대기</span></a>
+    <a href="#NEW-013" onclick="activate(this)">NEW-013 ETA + 3단계 DDD <span class="status s-wait">대기</span></a>
     <a href="#NEW-014" onclick="activate(this)">NEW-014 로딩 속도 개선 <span class="status s-wait">대기</span></a>
     <a href="#NEW-015" onclick="activate(this)">NEW-015 수정 이력 로그 <span class="status s-wait">대기</span></a>
     <a href="#NEW-016" onclick="activate(this)">NEW-016 문의 크롤링 <span class="status s-wait">대기</span></a>
@@ -129,7 +129,7 @@ a{color:#4361ee;text-decoration:none}
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-010</span></td><td>BDR 선박명 클릭 시 삭제</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-011</span></td><td>아랍권 인보이스 2건 동시 발송</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-012</span></td><td>인보이스/BDR 발송 후 발행완료 처리</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
-    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-013</span></td><td>공급 완료일 입력 시 지급기한일 DDD 자동 계산</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-013</span></td><td>ETA 필드 추가 + 3단계 DDD 자동 계산</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-014</span></td><td>웹 페이지 로딩 속도 개선</td><td>미정</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-015</span></td><td>주문 수정 이력 로그 (수정자 + 시간)</td><td>미정</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-016</span></td><td>홈페이지 문의 크롤링 (Playwright)</td><td>미정</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
@@ -1078,43 +1078,51 @@ E-mail : ops@globaloms.co.kr</pre></details>
 <div class="feature collapsed" id="NEW-013">
     <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
         <span class="feature-id">NEW-013</span>
-        <span class="feature-title">공급 완료일 입력 시 지급기한일 DDD 자동 계산</span>
+        <span class="feature-title">ETA 필드 추가 + 3단계 DDD 자동 계산</span>
         <span class="feature-priority p-high">상</span>
         <span class="feature-arrow">▼</span>
     </div>
     <div class="feature-body">
         <div class="meta">
-            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-26</div></div>
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-27</div></div>
             <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
             <div class="meta-item"><div class="label">담당자</div><div class="value">B 개발자(하지혁)</div></div>
         </div>
         <h4>배경/목적</h4>
-        <p>현재 <code>PayType</code>(결제조건) 변경 시에만 지급기한일이 자동 계산됨. 실무에서는 공급 완료일(<code>SupplyCompleteDate</code>)이 나중에 확정되므로, 이 날짜 입력 시 DDD를 재계산해서 지급기한일을 자동 갱신해야 함.</p>
-        <h4>현재 동작 vs 개선</h4>
+        <p>주문 진행 과정에서 <strong>3번의 DDD 재계산</strong>이 필요. 현재 ETA는 별도 필드 없이 요청사항에 "ETA: 3/7" 식으로 수기 입력 중. ETA 필드 추가 + 각 단계에서 자동 DDD 계산하면 수동 DDD 계산기 사용 불필요.</p>
+        <h4>업무 흐름과 3단계 DDD</h4>
         <table class="tbl">
-            <tr><th>트리거</th><th>현재</th><th>개선 후</th></tr>
-            <tr><td>PayType 변경</td><td>지급기한일 자동 계산 ✓</td><td>유지</td></tr>
-            <tr><td>공급 완료일 입력/변경</td><td><strong>아무 일도 안 일어남</strong></td><td>지급기한일 자동 재계산</td></tr>
+            <tr><th>단계</th><th>시점</th><th>트리거 필드</th><th>현재</th></tr>
+            <tr><td><strong>1단계</strong></td><td>에이전트 통화 후</td><td>ETA (신규)</td><td>필드 없음</td></tr>
+            <tr><td><strong>2단계</strong></td><td>공급일정 확인 후</td><td>공급예정일 (EstSupplyStartDate)</td><td>DDD 안 됨</td></tr>
+            <tr><td><strong>3단계</strong></td><td>BDR 수령 후</td><td>공급확정일 (SupplyCompleteDate)</td><td>DDD 안 됨</td></tr>
         </table>
+        <h4>DDD 계산 우선순위</h4>
+        <table class="tbl">
+            <tr><th>우선순위</th><th>필드</th><th>DB</th></tr>
+            <tr><td>1 (최우선)</td><td>공급확정일</td><td><code>SupplyCompleteDate</code> (기존)</td></tr>
+            <tr><td>2</td><td>공급예정일</td><td><code>EstSupplyStartDate</code> (기존)</td></tr>
+            <tr><td>3</td><td>ETA</td><td><code>Eta</code> (<strong>신규</strong>)</td></tr>
+            <tr><td>4 (기본)</td><td>공급요청시작일</td><td><code>ReqSupplyStartDate</code> (기존)</td></tr>
+        </table>
+        <p style="font-size:12px;color:#555">→ 값이 있는 것 중 가장 우선순위 높은 날짜로 DDD 계산</p>
         <h4>상세 요구사항</h4>
         <ol>
-            <li>주문 상세 팝업에서 "최종 공급 완료일" 입력/변경 시 지급기한일 자동 재계산</li>
-            <li>바이어/셀러 각각의 PayType 기준으로 DDD 계산</li>
-            <li>기존 API <code>/api/Etc/CalcPayDate</code> 그대로 사용 (공휴일 포함 계산)</li>
-            <li>PayType이 비어있으면 계산하지 않음</li>
+            <li><strong>ETA 필드 추가</strong> — <code>OrderInfo.Eta</code> (DateTime?, nullable), UI DatePicker 추가</li>
+            <li><strong>3개 필드 변경 시 DDD 자동 재계산</strong> — ETA, 공급예정일, 공급확정일</li>
+            <li>바이어/셀러 각각 PayType 기준, 기존 <code>/api/Etc/CalcPayDate</code> 사용</li>
+            <li>PayType 비어있으면 계산 안 함</li>
         </ol>
-        <h4>DDD 계산 기준일</h4>
-        <table class="tbl">
-            <tr><th>조건</th><th>계산 기준일</th></tr>
-            <tr><td>SupplyCompleteDate 있음</td><td>SupplyCompleteDate</td></tr>
-            <tr><td>SupplyCompleteDate 없음</td><td>ReqSupplyStartDate (공급 요청 시작일)</td></tr>
-        </table>
         <h4>주요 수정 파일</h4>
         <table class="tbl">
             <tr><th>파일</th><th>변경 내용</th></tr>
-            <tr><td><code>EditOrder.cs</code> L63</td><td>SupplyCompleteDate에 PropertyChanged 이벤트 추가</td></tr>
-            <tr><td><code>OrderList.razor.cs</code> L652-660</td><td>SupplyCompleteDate 변경 감지 → ReCalcPayDueDate 호출</td></tr>
+            <tr><td><code>OrderInfo.cs</code></td><td>Eta 필드 추가 (DateTime?, nullable)</td></tr>
+            <tr><td><code>EditOrder.cs</code></td><td>Eta, EstSupplyStartDate, SupplyCompleteDate에 PropertyChanged 추가</td></tr>
+            <tr><td><code>OrderList.razor</code></td><td>ETA 입력 DatePicker UI 추가</td></tr>
+            <tr><td><code>OrderList.razor.cs</code></td><td>3개 필드 변경 감지 → ReCalcPayDueDate 호출</td></tr>
+            <tr><td>DB 마이그레이션</td><td>OrderInfo 테이블에 Eta 컬럼 추가</td></tr>
         </table>
+        <p style="font-size:12px;color:#888;margin-top:8px">논의 (김동현/하지혁 2026-03-27): CIA 건은 ETA 기준 DDD가 중요. NEW-012(발행완료)와 연결성 있지만 NEW-013은 독립 구현 가능.</p>
     </div>
 </div>
 
