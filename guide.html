@@ -839,6 +839,7 @@ print(response.json())</div>
             <tr><td>업체별 별도 키</td><td>같은 구조로 행 추가, <code>AuthKey01</code>만 다르게</td></tr>
             <tr><td>키 유출 시</td><td>즉시 DELETE 후 새 키 INSERT</td></tr>
         </table>
+        <div class="tip">API Key 발급 시 DB에 주문 등록자/담당자 설정도 함께 필요합니다. 자세한 INSERT SQL과 GUID 확인 방법은 <a href="deploy.html" style="color:#1976d2;font-weight:600;">배포 가이드 → DB 마이그레이션 → 외부 API Key 등록</a>을 참고하세요.</div>
 
         <div class="warn">
             <strong>보안 주의:</strong><br>
