@@ -92,7 +92,7 @@ a{color:#4361ee;text-decoration:none}
     <div class="nav-section">개요</div>
     <a href="#overview" class="active" onclick="activate(this)">기능 목록</a>
 
-    <div class="nav-section">기능 상세 (13건)</div>
+    <div class="nav-section">기능 상세 (14건)</div>
     <a href="#NEW-001" onclick="activate(this)">NEW-001 대문자 변환 <span class="status s-done">✅ 완료</span></a>
     <a href="#NEW-002" onclick="activate(this)">NEW-002 AED 디르함 <span class="status s-done">✅ 완료</span></a>
     <a href="#NEW-003" onclick="activate(this)">NEW-003 IBK 은행 <span class="status s-done">✅ 완료</span></a>
@@ -102,7 +102,7 @@ a{color:#4361ee;text-decoration:none}
     <a href="#NEW-007" onclick="activate(this)">NEW-007 인쿼리 파싱 <span class="status s-done">✅ 완료</span></a>
     <a href="#NEW-008" onclick="activate(this)">NEW-008 요청사항 높이 <span class="status s-done">✅ 완료</span></a>
     <a href="#NEW-009" onclick="activate(this)">NEW-009 검색 매칭 점검 <span class="status s-done">✅ 완료</span></a>
-    <a href="#NEW-010" onclick="activate(this)">NEW-010 BDR 선박명 삭제 <span class="status s-wait">대기</span></a>
+    <a href="#NEW-010" onclick="activate(this)">NEW-010 선박명 제거 <span class="status s-done">✅ 완료</span></a>
     <a href="#NEW-011" onclick="activate(this)">NEW-011 아랍권 인보이스 2건 <span class="status s-wait">대기</span></a>
     <a href="#NEW-012" onclick="activate(this)">NEW-012 발행완료 처리 <span class="status s-wait">대기</span></a>
     <a href="#NEW-013" onclick="activate(this)">NEW-013 ETA + 3단계 DDD <span class="status s-wait">대기</span></a>
@@ -110,6 +110,10 @@ a{color:#4361ee;text-decoration:none}
     <a href="#NEW-015" onclick="activate(this)">NEW-015 수정 이력 로그 <span class="status s-wait">대기</span></a>
     <a href="#NEW-016" onclick="activate(this)">NEW-016 문의 크롤링 <span class="status s-wait">대기</span></a>
     <a href="#NEW-017" onclick="activate(this)">NEW-017 서비스 모니터링 <span class="status s-wait">대기</span></a>
+    <a href="#NEW-018" onclick="activate(this)">NEW-018 서류 편집기 <span class="status s-done">✅ 완료</span></a>
+
+    <div class="nav-section">추가 기능</div>
+    <a href="#EXT-API" onclick="activate(this)">외부 인쿼리 API <span class="status s-done">✅ 완료</span></a>
 </nav>
 
 <main class="main">
@@ -126,14 +130,15 @@ a{color:#4361ee;text-decoration:none}
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-007</span></td><td>인쿼리 텍스트 자동 파싱 → 주문 등록</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-done">✅ 완료</span></td><td>NEW-007-Unit/, NEW-007-Integration/</td></tr>
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-008</span></td><td>요청사항 텍스트 영역 자동 높이 조절</td><td>A 개발자(김동현)</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-done">✅ 완료</span></td><td>NEW-008-Unit/</td></tr>
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-009</span></td><td>검색 필드 부분 매칭(%LIKE%) 전체 점검</td><td>A 개발자(김동현)</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-done">✅ 완료</span></td><td>-</td></tr>
-    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-010</span></td><td>BDR 선박명 클릭 시 삭제</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-010</span></td><td>인보이스 발행 시 선박명 제거 체크박스</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-done">✅ 완료</span></td><td>-</td></tr>
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-011</span></td><td>아랍권 인보이스 2건 동시 발송</td><td>A 개발자(김동현)</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-012</span></td><td>인보이스/BDR 발송 후 발행완료 처리</td><td>A 개발자(김동현)</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
-    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-013</span></td><td>ETA 필드 추가 + 3단계 DDD 자동 계산</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-013</span></td><td>ETA 필드 추가 + 3단계 DDD 자동 계산</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-done">✅ 완료</span></td><td>-</td></tr>
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-014</span></td><td>웹 페이지 로딩 속도 개선</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
-    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-015</span></td><td>주문 수정 이력 로그 (수정자 + 시간)</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-015</span></td><td>주문 수정 이력 로그 (수정자 + 시간)</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-done">✅ 완료</span></td><td>-</td></tr>
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-016</span></td><td>홈페이지 문의 크롤링 (Playwright)</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-017</span></td><td>서비스 상태 모니터링 대시보드</td><td>미정</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-018</span></td><td>서류(PDF/이미지) 내용 편집기</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-done">✅ 완료</span></td><td>-</td></tr>
 </table>
 
 <!-- ==================== NEW-001 ==================== -->
@@ -837,41 +842,35 @@ E-mail : ops@globaloms.co.kr</pre></details>
 </div>
 
 <!-- ==================== NEW-010 ==================== -->
-<div class="feature collapsed" id="NEW-010">
+<div class="feature" id="NEW-010">
     <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
         <span class="feature-id">NEW-010</span>
-        <span class="feature-title">BDR 선박명 클릭 시 삭제</span>
+        <span class="feature-title">인보이스 발행 시 선박명 제거 체크박스</span>
         <span class="feature-priority p-mid">중</span>
         <span class="feature-arrow">▼</span>
     </div>
     <div class="feature-body">
         <div class="meta">
             <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-26</div></div>
-            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value" style="color:#2e7d32;font-weight:700">✅ 완료</div></div>
             <div class="meta-item"><div class="label">담당자</div><div class="value">B 개발자(하지혁)</div></div>
         </div>
         <h4>배경/목적</h4>
-        <p>관리자 페이지에서 BDR 클릭 후 표시되는 선박명 목록에서, 잘못 업로드된 BDR을 삭제할 방법이 없음. 선박명 클릭으로 해당 BDR 파일을 삭제할 수 있어야 함.</p>
-        <h4>현재 BDR 동작</h4>
-        <ul>
-            <li>BDR 파일 업로드: <code>SngDocUploadPanel</code> 컴포넌트 사용</li>
-            <li>업로드 완료 시: <code>OrderSettlement.IsRecvBdr = true</code></li>
-            <li>파일 삭제 시: <code>OrderSettlement.IsRecvBdr = false</code></li>
-            <li>BDR 파일은 <code>ImageLink</code> 테이블에 저장</li>
-        </ul>
+        <p>인보이스 발행 시 선박명을 포함하지 않아야 하는 경우가 있음. 기존 AED/IBK 체크박스와 동일한 패턴으로 "선박명 제거" 옵션 추가.</p>
         <h4>상세 요구사항</h4>
         <ol>
-            <li>BDR 목록에서 선박명 클릭 시 해당 BDR 파일 삭제</li>
-            <li>삭제 전 <strong>확인 모달</strong> 표시 ("TONG RUN 7 의 BDR을 삭제하시겠습니까?")</li>
-            <li>삭제 시: <code>ImageLink</code> 비활성화 + <code>OrderSettlement.IsRecvBdr = false</code></li>
-            <li>UI 목록에서 즉시 제거 (새로고침 없이)</li>
+            <li>인보이스(INVOICE) 서류 발행 영역에 <strong>"선박명 제거" 체크박스</strong> 추가</li>
+            <li>체크 시 인보이스 PDF에서 선박명(ShipName)이 빈 값으로 생성</li>
+            <li>AED, IBK 체크박스와 <strong>조합 가능</strong> (3개 독립 동작)</li>
+            <li>발행 완료 후 체크박스 자동 초기화</li>
         </ol>
-        <h4>주요 수정 파일</h4>
+        <h4>수정 파일</h4>
         <table class="tbl">
             <tr><th>파일</th><th>변경 내용</th></tr>
-            <tr><td><code>OrderList.razor</code></td><td>BDR 선박명에 삭제 클릭 이벤트 + X 아이콘</td></tr>
-            <tr><td><code>OrderList.razor.cs</code></td><td>BDR 삭제 API 호출 로직</td></tr>
-            <tr><td><code>OrderController.cs</code></td><td>BDR 삭제 엔드포인트</td></tr>
+            <tr><td><code>SngDocUploadPanel.razor</code></td><td>"선박명 제거" 체크박스 + RemoveShipName 파라미터 추가</td></tr>
+            <tr><td><code>OrderList.razor</code></td><td>@bind-RemoveShipName 바인딩</td></tr>
+            <tr><td><code>OrderList.razor.cs</code></td><td>RemoveShipName 프로퍼티 + API 쿼리스트링 추가</td></tr>
+            <tr><td><code>InvoiceController.cs</code></td><td>removeShipName=true일 때 ShipName 빈 값 설정</td></tr>
         </table>
     </div>
 </div>
@@ -1230,6 +1229,161 @@ public virtual UserAccount ModUser { get; set; }</pre>
     </div>
 </div>
 
+<!-- ==================== NEW-018 ==================== -->
+<div class="feature" id="NEW-018">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-018</span>
+        <span class="feature-title">서류(PDF/이미지) 내용 편집기</span>
+        <span class="feature-priority p-mid">중</span>
+        <span class="feature-arrow">▼</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-27</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value" style="color:#2e7d32;font-weight:700">✅ 완료</div></div>
+            <div class="meta-item"><div class="label">우선순위</div><div class="value">중</div></div>
+            <div class="meta-item"><div class="label">담당자</div><div class="value">B 개발자(하지혁)</div></div>
+        </div>
+        <h4>배경/목적</h4>
+        <p>BDR, 인보이스 등 서류 PDF/이미지에서 특정 내용(업체명, 선박명 등)을 지워서 수정본을 만들어야 하는 경우가 있음. 외부 편집 도구 없이 인트라넷 내에서 바로 편집 가능해야 함.</p>
+        <h4>상세 요구사항</h4>
+        <ol>
+            <li>서류관리 → 서류보기에서 각 파일 옆에 <strong>편집 아이콘</strong> 표시</li>
+            <li>클릭 시 이미지 편집 모달 열림</li>
+            <li><strong>파일 로드</strong>: 📂 파일 선택 버튼으로 로컬 PDF/이미지 직접 로드</li>
+            <li><strong>멀티페이지 PDF 지원</strong>: 전체 페이지를 세로로 이어붙여 표시, 페이지 구분선 + 번호</li>
+            <li><strong>두 가지 편집 모드</strong>:<br>
+                &nbsp;&nbsp;• 브러시 모드: 원형 브러시로 자유롭게 칠하기 (크기 조절 슬라이더)<br>
+                &nbsp;&nbsp;• 사각형 모드: 드래그로 사각형 영역 선택</li>
+            <li>편집 중에는 <strong>빨간 하이라이트</strong>로 표시만 — 실제 지우기는 저장 시 적용</li>
+            <li><strong>지우기 알고리즘</strong>: 각 마스크 픽셀마다 주변 배경 픽셀 30개 평균으로 채움 (글자 건너뜀, 워터마크 상쇄)</li>
+            <li><strong>색상지정 모드</strong>: 이미지에서 클릭하여 3×3 평균색 추출 → 해당 색으로 고정 채움</li>
+            <li><strong>되돌리기/초기화</strong>: 스트로크 단위 Undo (최대 30회), 전체 초기화</li>
+            <li><strong>저장</strong>: 원본 유지 + 편집본을 새 파일로 추가 (PDF→PDF, 이미지→이미지)</li>
+            <li><strong>파일명 규칙</strong>: 원본명 + E (예: <code>_BDR_20260326A9PPE.pdf</code>), 중복 시 E2, E3...</li>
+            <li>바이어 관리(OrderList), 셀러 관리(SalesOrderList) 양쪽 모두 적용</li>
+        </ol>
+        <h4>영향 범위</h4>
+        <ul class="checklist">
+            <li class="checked">바이어 관리 — OrderList.razor 편집 모달/로직 추가</li>
+            <li class="checked">셀러 관리 — SalesOrderList.razor 동일 적용</li>
+            <li class="unchecked">정산 관리</li><li class="unchecked">이메일 시스템</li>
+            <li class="unchecked">업체 관리</li><li class="unchecked">회원 관리</li>
+            <li class="unchecked">견적(RFQ)</li>
+            <li class="checked">문서/파일 — 편집된 파일 저장, ImageLink 신규 생성</li>
+            <li class="unchecked">DB 스키마 변경</li>
+            <li class="checked">신규 API 필요 — ImageEditController (Save)</li>
+            <li class="unchecked">기존 API 수정</li>
+        </ul>
+        <h4>API 설계</h4>
+        <table class="tbl">
+            <tr><th>Method</th><th>Endpoint</th><th>설명</th><th>신규/수정</th></tr>
+            <tr><td>POST</td><td><code>/api/ImageEdit/Save</code></td><td>편집된 페이지 이미지 배열을 PDF로 변환하여 저장</td><td>신규</td></tr>
+        </table>
+        <h4>신규 파일</h4>
+        <table class="tbl">
+            <tr><th>파일</th><th>설명</th></tr>
+            <tr><td><code>wwwroot/js/bdr-editor.js</code></td><td>Canvas 기반 이미지 편집기 (브러시/사각형/멀티페이지/색상지정)</td></tr>
+            <tr><td><code>Controllers/ImageEditController.cs</code></td><td>편집 저장 API (멀티페이지 → PDF 변환)</td></tr>
+        </table>
+        <h4>수정 파일</h4>
+        <table class="tbl">
+            <tr><th>파일</th><th>변경 내용</th></tr>
+            <tr><td><code>SngDocUploadPanel.razor</code></td><td>OnEditImage 콜백 + 편집 아이콘 추가</td></tr>
+            <tr><td><code>OrderList.razor</code></td><td>편집 모달 UI</td></tr>
+            <tr><td><code>OrderList.razor.cs</code></td><td>편집 모달 로직 (파일 로드, 저장, 모드 전환, 색상지정)</td></tr>
+            <tr><td><code>SalesOrderList.razor</code></td><td>편집 모달 UI (동일)</td></tr>
+            <tr><td><code>SalesOrderList.razor.cs</code></td><td>편집 모달 로직 (동일)</td></tr>
+            <tr><td><code>index.html</code></td><td>pdf.js CDN + bdr-editor.js 스크립트 등록</td></tr>
+        </table>
+        <h4>사용 라이브러리</h4>
+        <table class="tbl">
+            <tr><th>라이브러리</th><th>용도</th><th>위치</th></tr>
+            <tr><td>pdf.js (CDN)</td><td>브라우저에서 PDF → Canvas 렌더링</td><td>프론트</td></tr>
+            <tr><td>PuppeteerSharp (기존)</td><td>편집된 이미지 → PDF 변환</td><td>백엔드</td></tr>
+        </table>
+        <h4>참고사항</h4>
+        <p>PDF 렌더링은 클라이언트(pdf.js)에서 처리, 서버 의존 없음. 편집은 Canvas 위 마스크 방식 (원본 변경 없이 표시만). 저장 시에만 마스크 영역을 배경색으로 채워서 최종 이미지 생성. 고정색 모드는 워터마크가 심한 문서에서 유용.</p>
+    </div>
+</div>
+
+<!-- ==================== 외부 인쿼리 API ==================== -->
+<div class="feature" id="EXT-API">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">EXT-API</span>
+        <span class="feature-title">외부 인쿼리 API (자동 주문 생성)</span>
+        <span class="feature-priority p-high">상</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-31</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value" style="color:#2e7d32;font-weight:700">✅ 완료</div></div>
+            <div class="meta-item"><div class="label">우선순위</div><div class="value">상</div></div>
+            <div class="meta-item"><div class="label">담당자</div><div class="value">B 개발자(하지혁)</div></div>
+        </div>
+        <h4>배경/목적</h4>
+        <p>외부 시스템에서 인쿼리 텍스트를 API로 전송하면, 웹에서 인쿼리 파싱 → 주문 등록하는 것과 동일하게 바이어 주문 + 셀러 주문이 자동 생성됩니다. 수작업 없이 시스템 간 자동 연동이 가능합니다.</p>
+        <h4>상세 요구사항</h4>
+        <ol>
+            <li><strong>API Key 인증</strong>: 헤더 <code>X-Api-Key</code>로 인증. DB <code>ExternalApi</code> 테이블에서 키 관리</li>
+            <li><strong>인쿼리 텍스트 파싱</strong>: 기존 <code>InquiryTextParser</code>와 동일한 파싱 엔진 사용</li>
+            <li><strong>자동 주문 생성</strong>: 웹 인쿼리 파싱과 동일한 4단계 흐름 (POST 생성 → GET 조회 → PUT 셀러 정보 수정 → 셀러 지급기한 업데이트)</li>
+            <li><strong>동시 호출 제어</strong>: SemaphoreSlim(1,1)로 동시 1개만 처리 → 주문번호 정합성 보장</li>
+            <li><strong>자동 생성 항목</strong>: 바이어 주문, 셀러 주문, 유종/가격, 추가비용(BARGE CHARGE), 지급기한(DDD+공휴일), 에이전트, 선박(미등록 시 자동 생성)</li>
+        </ol>
+        <h4>API 설계</h4>
+        <table class="tbl">
+            <tr><th>Method</th><th>Endpoint</th><th>설명</th><th>신규/수정</th></tr>
+            <tr><td>POST</td><td><code>/api/ExternalInquiry/Create</code></td><td>인쿼리 텍스트 → 자동 주문 생성</td><td>신규</td></tr>
+        </table>
+        <h4>인증 방식</h4>
+        <table class="tbl">
+            <tr><th>항목</th><th>설명</th></tr>
+            <tr><td>인증 헤더</td><td><code>X-Api-Key: 발급받은키</code></td></tr>
+            <tr><td>키 저장</td><td>DB <code>ExternalApi</code> 테이블 (<code>ApiName = 'EXTERNAL_INQUIRY'</code>)</td></tr>
+            <tr><td>키 발급</td><td>DB INSERT 1줄 (업체별 별도 키 발급 가능)</td></tr>
+            <tr><td>키 폐기</td><td>해당 행 DELETE</td></tr>
+        </table>
+        <h4>신규 파일</h4>
+        <table class="tbl">
+            <tr><th>파일</th><th>설명</th></tr>
+            <tr><td><code>Authentication/ApiKeyAuthAttribute.cs</code></td><td>API Key 인증 필터</td></tr>
+            <tr><td><code>Controllers/ExternalInquiryController.cs</code></td><td>외부 인쿼리 API 엔드포인트</td></tr>
+        </table>
+        <h4>수정 파일</h4>
+        <table class="tbl">
+            <tr><th>파일</th><th>변경 내용</th></tr>
+            <tr><td><code>Program.cs</code></td><td>AddControllersAsServices() 추가</td></tr>
+            <tr><td><code>OrderController.cs</code></td><td>FullDetailsOfOrderForAdmin AllowAnonymous + RegUserId 지원</td></tr>
+        </table>
+        <h4>DB 변경</h4>
+        <table class="tbl">
+            <tr><th>테이블</th><th>변경</th></tr>
+            <tr><td><code>ExternalApi</code></td><td>EXTERNAL_INQUIRY 행 INSERT (API Key + 서비스 유저 GUID)</td></tr>
+        </table>
+        <h4>요청/응답 예시</h4>
+        <pre class="codeblock">// 요청
+POST /api/ExternalInquiry/Create
+X-Api-Key: sk-sngy-8f2a4c6e9b1d3f5a7c0e2b4d
+{"text":"VESSEL NAME: DIAMOND SEA\nIMO : 9112233\n..."}
+
+// 응답 (성공)
+{
+  "code": 200,
+  "message": "주문 생성 완료",
+  "data": {
+    "orderId": "20260331WMQG",
+    "vesselName": "DIAMOND SEA",
+    "buyerCompany": "홍콩이마린",
+    "sellerCompany": "동림",
+    "buyerPayDueDate": "2026-04-13",
+    "sellerPayDueDate": "2026-03-23"
+  }
+}</pre>
+    </div>
+</div>
+
 </main>
 
 <script>
@@ -1237,6 +1391,25 @@ function activate(el) {
     document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
     el.classList.add('active');
 }
+// 스크롤 시 사이드바 자동 하이라이트
+const sidebarLinks = document.querySelectorAll('.sidebar a[href^="#"]');
+const sections = [];
+sidebarLinks.forEach(link => {
+    const id = link.getAttribute('href').substring(1);
+    const el = document.getElementById(id);
+    if (el) sections.push({ id, el, link });
+});
+window.addEventListener('scroll', () => {
+    let current = sections[0];
+    for (const s of sections) {
+        if (s.el.getBoundingClientRect().top <= 80) current = s;
+    }
+    if (current) {
+        sidebarLinks.forEach(a => a.classList.remove('active'));
+        current.link.classList.add('active');
+        current.link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+});
 // URL 해시로 자동 스크롤
 if (location.hash) {
     const el = document.querySelector(location.hash);

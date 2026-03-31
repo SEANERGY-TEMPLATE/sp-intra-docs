@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Seanergy - 사용자 가이드</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:#f5f6fa;color:#333;display:flex;min-height:100vh}
+a{color:#4361ee;text-decoration:none}
+
+.sidebar{width:260px;background:#1a1a2e;color:#fff;padding:20px 0;position:fixed;height:100vh;overflow-y:auto}
+.sidebar h1{font-size:15px;padding:0 20px 16px;border-bottom:1px solid #2a2a4a;margin-bottom:12px;font-weight:600}
+.sidebar .nav-section{font-size:10px;color:#666;padding:12px 20px 4px;text-transform:uppercase;letter-spacing:1px}
+.sidebar a{display:flex;align-items:center;gap:8px;padding:8px 20px;color:#aab;font-size:13px;transition:all .15s;border-left:3px solid transparent}
+.sidebar a:hover{background:#2a2a4a;color:#fff}
+.sidebar a.active{background:#2a2a4a;color:#4361ee;border-left-color:#4361ee}
+
+.main{margin-left:260px;flex:1;padding:24px 32px 60px}
+.main h2{font-size:20px;font-weight:700;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #e0e0e0}
+
+.feature{background:#fff;border-radius:8px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,.08);overflow:hidden;scroll-margin-top:20px}
+.feature-header{padding:16px 20px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none;border-bottom:1px solid #f0f0f0}
+.feature-header:hover{background:#fafbff}
+.feature-id{font-size:11px;color:#4361ee;font-weight:700;background:#e8eaf6;padding:2px 8px;border-radius:4px}
+.feature-title{font-size:15px;font-weight:600;margin-left:10px;flex:1}
+.feature-arrow{font-size:12px;color:#aaa;transition:transform .2s;margin-left:8px}
+.feature.collapsed .feature-arrow{transform:rotate(-90deg)}
+.feature-body{padding:20px;display:block}
+.feature.collapsed .feature-body{display:none}
+
+.feature-body h4{font-size:13px;font-weight:600;color:#444;margin:16px 0 8px;padding-bottom:4px;border-bottom:1px solid #f0f0f0}
+.feature-body h4:first-child{margin-top:0}
+.feature-body p,.feature-body li{font-size:13px;line-height:1.7;color:#555}
+.feature-body ul,.feature-body ol{padding-left:20px;margin-bottom:8px}
+.feature-body li{margin-bottom:2px}
+
+.tbl{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px}
+.tbl th{background:#f8f9fa;padding:7px 10px;text-align:left;font-weight:600;color:#555;border-bottom:1px solid #e0e0e0}
+.tbl td{padding:7px 10px;border-bottom:1px solid #f0f0f0}
+.tbl tr:last-child td{border-bottom:none}
+.tbl code{background:#f0f0f0;padding:1px 5px;border-radius:3px;font-size:11px;color:#c62828}
+
+.codeblock{background:#1e1e1e;color:#d4d4d4;padding:12px 16px;border-radius:6px;font-family:'Consolas',monospace;font-size:12px;line-height:1.5;overflow-x:auto;margin:8px 0;white-space:pre}
+
+.badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:600}
+
+.tip{background:#e3f2fd;border-left:4px solid #1976d2;padding:10px 14px;border-radius:0 6px 6px 0;margin:8px 0;font-size:12px;color:#1565c0}
+.warn{background:#fff3e0;border-left:4px solid #e65100;padding:10px 14px;border-radius:0 6px 6px 0;margin:8px 0;font-size:12px;color:#e65100}
+
+.step{counter-reset:step-counter}
+.step li{counter-increment:step-counter;list-style:none;position:relative;padding-left:32px;margin-bottom:10px}
+.step li::before{content:counter(step-counter);position:absolute;left:0;top:0;width:22px;height:22px;background:#4361ee;color:#fff;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+@media print{.sidebar{display:none}.main{margin-left:0}.feature.collapsed .feature-body{display:block}}
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+    <h1>사용자 가이드</h1>
+    <div class="nav-section">인보이스</div>
+    <a href="#aed" class="active" onclick="activate(this)">AED(디르함) 발행</a>
+    <a href="#ibk" onclick="activate(this)">IBK 은행계좌 발행</a>
+    <a href="#remove-ship" onclick="activate(this)">선박명 제거 발행</a>
+
+    <div class="nav-section">인쿼리 파싱</div>
+    <a href="#inquiry-overview" onclick="activate(this)">개요 및 사용법</a>
+    <a href="#inquiry-format" onclick="activate(this)">입력 형식 상세</a>
+    <a href="#inquiry-oil" onclick="activate(this)">유종 / 규격 / 수량</a>
+    <a href="#inquiry-price" onclick="activate(this)">가격 / 결제조건</a>
+    <a href="#inquiry-company" onclick="activate(this)">업체명 매핑</a>
+    <a href="#inquiry-agent" onclick="activate(this)">에이전트 정보</a>
+    <a href="#inquiry-examples" onclick="activate(this)">전체 입력 예시</a>
+
+    <div class="nav-section">ETA / DDD</div>
+    <a href="#eta-ddd" onclick="activate(this)">ETA + 자동 DDD 계산</a>
+
+    <div class="nav-section">서류 편집</div>
+    <a href="#editor-overview" onclick="activate(this)">편집기 사용법</a>
+    <a href="#editor-modes" onclick="activate(this)">편집 모드 상세</a>
+    <a href="#editor-save" onclick="activate(this)">저장 및 파일명 규칙</a>
+
+    <div class="nav-section">외부 API</div>
+    <a href="#ext-api" onclick="activate(this)">외부 인쿼리 API</a>
+</nav>
+
+<main class="main">
+
+<h2>Seanergy 사용자 가이드</h2>
+<p style="font-size:13px;color:#666;margin-bottom:24px;">이 문서는 씨너지파트너 인트라넷의 신규 기능 사용법을 설명합니다. 최종 업데이트: 2026-03-30</p>
+
+<!-- ==================== AED ==================== -->
+<div class="feature" id="aed">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-002</span>
+        <span class="feature-title">인보이스 AED(디르함) 통화 발행</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <h4>기능 설명</h4>
+        <p>아랍권(UAE) 거래 시 인보이스를 <strong>USD 대신 AED(디르함)</strong>로 발행합니다. 고정 환율 <code>1 USD = 3.6725 AED</code>로 자동 변환됩니다.</p>
+
+        <h4>사용 방법</h4>
+        <ol class="step">
+            <li>바이어 관리 → 주문 상세 → 서류관리 섹션으로 이동</li>
+            <li><strong>"AED(디르함) 발행"</strong> 체크박스를 선택</li>
+            <li>인보이스 발행 버튼 클릭</li>
+            <li>생성된 PDF에 AED 금액 + 환율 정보가 표시됨</li>
+        </ol>
+
+        <h4>변환 예시</h4>
+        <table class="tbl">
+            <tr><th>USD 금액</th><th>AED 금액</th><th>계산</th></tr>
+            <tr><td>$50,000.00</td><td>183,625.00 AED</td><td>50,000 x 3.6725</td></tr>
+            <tr><td>$1,400.00</td><td>5,141.50 AED</td><td>1,400 x 3.6725</td></tr>
+            <tr><td>$500.00</td><td>1,836.25 AED</td><td>500 x 3.6725</td></tr>
+        </table>
+
+        <div class="tip">IBK 은행계좌, 선박명 제거와 동시에 사용 가능합니다. 3개 체크박스를 모두 선택할 수 있습니다.</div>
+    </div>
+</div>
+
+<!-- ==================== IBK ==================== -->
+<div class="feature" id="ibk">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-003</span>
+        <span class="feature-title">인보이스 IBK 은행계좌 발행</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <h4>기능 설명</h4>
+        <p>인보이스 하단 Payment Instructions에 <strong>우리은행(기본) 대신 IBK(기업은행)</strong> 계좌를 표시합니다.</p>
+
+        <h4>사용 방법</h4>
+        <ol class="step">
+            <li>바이어 관리 → 주문 상세 → 서류관리 섹션으로 이동</li>
+            <li><strong>"IBK 계좌로 발행"</strong> 체크박스를 선택</li>
+            <li>인보이스 발행 버튼 클릭</li>
+        </ol>
+
+        <h4>은행 계좌 정보</h4>
+        <table class="tbl">
+            <tr><th>항목</th><th>우리은행 (기본)</th><th>IBK 기업은행</th></tr>
+            <tr><td>계좌번호</td><td><code>1081-101-077868</code></td><td><code>054-160034-56-00011</code></td></tr>
+            <tr><td>은행명</td><td>Woori Bank</td><td>Industrial Bank of Korea</td></tr>
+            <tr><td>SWIFT</td><td><code>HVBKKRSE</code></td><td><code>IBKOKRSEXXX</code></td></tr>
+        </table>
+    </div>
+</div>
+
+<!-- ==================== 선박명 제거 ==================== -->
+<div class="feature" id="remove-ship">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-010</span>
+        <span class="feature-title">인보이스 선박명 제거 발행</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <h4>기능 설명</h4>
+        <p>기밀 또는 계약상 이유로 <strong>인보이스에서 선박명을 제거</strong>합니다. "Vessel /Ship To" 라벨과 선박명이 모두 비워집니다.</p>
+
+        <h4>사용 방법</h4>
+        <ol class="step">
+            <li>바이어 관리 → 주문 상세 → 서류관리 섹션으로 이동</li>
+            <li><strong>"선박명 제거"</strong> 체크박스를 선택</li>
+            <li>인보이스 발행 버튼 클릭</li>
+            <li>생성된 PDF에서 선박명 관련 항목이 공란으로 표시됨</li>
+        </ol>
+
+        <h4>제거되는 항목</h4>
+        <table class="tbl">
+            <tr><th>위치</th><th>선박명 제거 OFF</th><th>선박명 제거 ON</th></tr>
+            <tr><td>인보이스 상단 헤더</td><td>WAN YING ASSAA</td><td>(공란)</td></tr>
+            <tr><td>Vessel /Ship To 라벨</td><td>Vessel /Ship To</td><td>(공란)</td></tr>
+            <tr><td>Vessel /Ship To 값</td><td>WAN YING ASSAA</td><td>(공란)</td></tr>
+        </table>
+
+        <div class="tip">AED, IBK 옵션과 동시에 사용 가능합니다.</div>
+    </div>
+</div>
+
+<!-- ==================== 인쿼리 파싱 - 개요 ==================== -->
+<div class="feature" id="inquiry-overview">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-007</span>
+        <span class="feature-title">인쿼리 자동 파싱 - 개요 및 사용법</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <h4>기능 설명</h4>
+        <p>인쿼리(견적 요청) 텍스트를 붙여넣으면 <strong>선박명, 항구, 유종, 수량, 가격, 결제조건</strong> 등을 자동으로 추출하여 바이어/셀러 주문을 생성합니다. 수작업 입력 없이 복사+붙여넣기만으로 주문이 만들어집니다.</p>
+
+        <h4>사용 방법</h4>
+        <ol class="step">
+            <li>바이어 관리 페이지에서 <strong>"인쿼리 파싱"</strong> 버튼 클릭</li>
+            <li>인쿼리 텍스트를 입력창에 <strong>복사+붙여넣기</strong></li>
+            <li><strong>"파싱"</strong> 버튼 클릭</li>
+            <li>자동 추출된 정보를 확인 (선박명, 항구, 유종, 가격 등)</li>
+            <li>필요 시 수정 후 <strong>"주문 등록"</strong> 클릭</li>
+        </ol>
+
+        <h4>필수 입력 항목</h4>
+        <div class="warn">
+            <strong>아래 7개 항목은 반드시 포함되어야 합니다.</strong> 하나라도 빠지면 파싱이 실패합니다.
+        </div>
+        <table class="tbl">
+            <tr><th>#</th><th>항목</th><th>키워드</th><th>예시</th></tr>
+            <tr><td>1</td><td><strong>선박명</strong></td><td><code>VESSEL NAME:</code></td><td><code>VESSEL NAME: DIAMOND SEA</code></td></tr>
+            <tr><td>2</td><td><strong>IMO</strong></td><td><code>IMO :</code></td><td><code>IMO : 9112233</code></td></tr>
+            <tr><td>3</td><td><strong>항구</strong></td><td><code>DELIVERY PORT/AREA NAME:</code></td><td><code>DELIVERY PORT/AREA NAME: BUSAN</code></td></tr>
+            <tr><td>4</td><td><strong>공급일</strong></td><td><code>DELIVERY WINDOW:</code></td><td><code>DELIVERY WINDOW: 15-17TH MAR 2026</code></td></tr>
+            <tr><td>5</td><td><strong>유종 + 수량</strong></td><td>(유종명 : 수량MT)</td><td><code>VLSFO : 100MT</code> (최소 1개)</td></tr>
+            <tr><td>6</td><td><strong>바이어</strong></td><td><code>바이어 :</code> 또는 <code>BUYER :</code></td><td><code>바이어 : 홍콩이마린 1400 (30DDD)</code></td></tr>
+            <tr><td>7</td><td><strong>셀러</strong></td><td><code>셀러 :</code> 또는 <code>SELLER :</code></td><td><code>셀러 : 금진 1300 (7DDD)</code></td></tr>
+        </table>
+
+        <h4>선택 입력 항목</h4>
+        <p>아래 항목은 없어도 파싱이 성공합니다. 있으면 자동으로 입력됩니다.</p>
+        <table class="tbl">
+            <tr><th>항목</th><th>키워드</th><th>예시</th></tr>
+            <tr><td>에이전트 업체</td><td><code>AGENT :</code></td><td><code>AGENT : GLOBAL OFFSHORE MARINE SERVICE</code></td></tr>
+            <tr><td>에이전트 전화</td><td><code>T.</code></td><td><code>T.+82 51 715 9679</code></td></tr>
+            <tr><td>에이전트 이메일</td><td><code>E-mail :</code></td><td><code>E-mail : ops@globaloms.co.kr</code></td></tr>
+            <tr><td>에이전트 담당자</td><td><code>AGENT NAME :</code></td><td><code>AGENT NAME : CHOI, SUNG HO</code></td></tr>
+            <tr><td>서플라이어</td><td><code>서플 :</code></td><td><code>서플 : Roins</code></td></tr>
+            <tr><td>비고</td><td><code>비고 :</code> 또는 <code>REMARK :</code></td><td><code>비고 : STEM CONFIRMED</code></td></tr>
+        </table>
+
+        <h4>최소 입력 예시 (필수 항목만)</h4>
+        <div class="codeblock">VESSEL NAME: SEA PIONEER
+IMO : 9334567
+DELIVERY PORT/AREA NAME: BUSAN
+DELIVERY WINDOW: 10-12TH APR 2026
+VLSFO : 100MT
+바이어 : 홍콩이마린 1400 (30DDD)
+셀러 : 금진 1300 (7DDD)</div>
+        <div class="tip">위 7줄만 있으면 주문이 생성됩니다. 에이전트, 서플라이어, 비고는 나중에 웹에서 수동 입력 가능합니다.</div>
+
+        <h4>파싱 실패 시 확인 사항</h4>
+        <table class="tbl">
+            <tr><th>에러 메시지</th><th>원인</th><th>해결</th></tr>
+            <tr><td>선박명을 찾을 수 없습니다</td><td><code>VESSEL NAME:</code> 누락</td><td>텍스트에 선박명 추가</td></tr>
+            <tr><td>IMO를 찾을 수 없습니다</td><td><code>IMO :</code> 누락</td><td>IMO 번호 추가 (숫자만)</td></tr>
+            <tr><td>항구를 찾을 수 없습니다</td><td><code>DELIVERY PORT:</code> 누락</td><td>항구명 추가</td></tr>
+            <tr><td>공급일을 찾을 수 없습니다</td><td><code>DELIVERY WINDOW:</code> 누락</td><td>날짜 범위 추가</td></tr>
+            <tr><td>유종 정보가 없습니다</td><td>유종 라인 누락</td><td><code>VLSFO : 100MT</code> 형식 추가</td></tr>
+            <tr><td>바이어 정보가 없습니다</td><td><code>바이어 :</code> 누락</td><td>바이어 업체+가격+결제조건 추가</td></tr>
+            <tr><td>가격 개수가 유종과 불일치</td><td>유종 3개인데 가격 2개</td><td>가격을 유종 개수만큼 <code>/</code>로 구분</td></tr>
+            <tr><td>바이어 업체를 찾을 수 없습니다</td><td>DB에 미등록 업체</td><td>업체관리에서 먼저 등록</td></tr>
+        </table>
+
+        <h4>전체 추출 항목</h4>
+        <table class="tbl">
+            <tr><th>항목</th><th>설명</th><th>필수</th></tr>
+            <tr><td>선박명 (Vessel)</td><td>선박 이름</td><td>필수</td></tr>
+            <tr><td>IMO</td><td>선박 고유번호 (7자리)</td><td>필수</td></tr>
+            <tr><td>항구 (Port)</td><td>공급 항구</td><td>필수</td></tr>
+            <tr><td>공급일 (Delivery Window)</td><td>공급 시작~종료일</td><td>필수</td></tr>
+            <tr><td>유종 + 수량</td><td>VLSFO, HSFO 등 + MT</td><td>필수</td></tr>
+            <tr><td>바이어 정보</td><td>업체명 + 단가 + 결제조건</td><td>필수</td></tr>
+            <tr><td>셀러 정보</td><td>업체명 + 단가 + 결제조건</td><td>필수</td></tr>
+            <tr><td>에이전트</td><td>업체명, 전화, 이메일, 담당자</td><td>선택</td></tr>
+            <tr><td>서플라이어</td><td>공급업체명</td><td>선택</td></tr>
+            <tr><td>비고</td><td>추가 메모</td><td>선택</td></tr>
+        </table>
+
+        <div class="warn">파싱 결과는 반드시 확인 후 저장하세요. 텍스트 형식이 다르면 일부 항목이 빠질 수 있습니다.</div>
+    </div>
+</div>
+
+<!-- ==================== 인쿼리 파싱 - 입력 형식 ==================== -->
+<div class="feature" id="inquiry-format">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-007</span>
+        <span class="feature-title">인쿼리 파싱 - 입력 형식 상세</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <h4>필드별 입력 형식</h4>
+        <table class="tbl">
+            <tr><th>필드</th><th>키워드</th><th>입력 예시</th></tr>
+            <tr><td>선박명</td><td><code>VESSEL NAME:</code></td><td><code>VESSEL NAME: SEA PIONEER</code></td></tr>
+            <tr><td>IMO</td><td><code>IMO :</code></td><td><code>IMO : 9334567</code></td></tr>
+            <tr><td>항구</td><td><code>DELIVERY PORT/AREA NAME:</code><br>또는 <code>DELIVERY PORT:</code></td><td><code>DELIVERY PORT/AREA NAME: BUSAN</code></td></tr>
+            <tr><td>공급일</td><td><code>DELIVERY WINDOW:</code></td><td><code>DELIVERY WINDOW: 16-20TH MAR 2026</code></td></tr>
+            <tr><td>유종</td><td>(유종명 : 수량MT)</td><td><code>VLSFO : 100MT</code></td></tr>
+            <tr><td>바이어</td><td><code>바이어 :</code> 또는 <code>BUYER :</code></td><td><code>바이어 : 홍콩이마린 1400 (30DDD)</code></td></tr>
+            <tr><td>셀러</td><td><code>셀러 :</code> 또는 <code>SELLER :</code></td><td><code>셀러 : 금진 1300 (7DDD)</code></td></tr>
+            <tr><td>서플라이어</td><td><code>서플 :</code> 또는 <code>SUPPLIER :</code></td><td><code>서플 : Roins</code></td></tr>
+            <tr><td>에이전트</td><td><code>AGENT :</code></td><td><code>AGENT : GLOBAL OFFSHORE MARINE SERVICE</code></td></tr>
+            <tr><td>전화</td><td><code>T.</code> 또는 <code>TEL</code></td><td><code>T.+82 51 715 9679</code></td></tr>
+            <tr><td>이메일</td><td><code>E-mail :</code></td><td><code>E-mail : ops@globaloms.co.kr</code></td></tr>
+            <tr><td>담당자</td><td><code>AGENT NAME :</code></td><td><code>AGENT NAME : SONG, HYO SUNG</code></td></tr>
+            <tr><td>비고</td><td><code>비고 :</code> 또는 <code>REMARK :</code></td><td><code>비고 : STEM CONFIRMED</code></td></tr>
+        </table>
+
+        <h4>공급일(Delivery Window) 형식</h4>
+        <p>날짜 범위를 입력합니다. 서수 접미사(ST, ND, RD, TH)는 자동으로 제거됩니다.</p>
+        <table class="tbl">
+            <tr><th>입력 예시</th><th>파싱 결과</th></tr>
+            <tr><td><code>16-20TH MAR 2026</code></td><td>2026-03-16 ~ 2026-03-20</td></tr>
+            <tr><td><code>1-3RD AUG 2026</code></td><td>2026-08-01 ~ 2026-08-03</td></tr>
+            <tr><td><code>10-12TH APR 2026</code></td><td>2026-04-10 ~ 2026-04-12</td></tr>
+        </table>
+
+        <div class="tip">키워드는 대소문자를 구분하지 않습니다. <code>vessel name:</code>이나 <code>VESSEL NAME:</code> 모두 인식됩니다.</div>
+    </div>
+</div>
+
+<!-- ==================== 인쿼리 파싱 - 유종/규격/수량 ==================== -->
+<div class="feature" id="inquiry-oil">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-007</span>
+        <span class="feature-title">인쿼리 파싱 - 유종 / 규격 / 수량</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <h4>지원 유종</h4>
+        <p>아래 유종을 인식합니다. 규격은 자동으로 ISO 8217 규격으로 변환됩니다.</p>
+        <table class="tbl">
+            <tr><th>유종</th><th>입력 예시</th><th>자동 변환 규격</th></tr>
+            <tr><td>VLSFO</td><td><code>VLSFO : 100MT</code></td><td>ISO 8217:2010 RMG 380 Max 0.5% S</td></tr>
+            <tr><td>VLSFO 180VIS</td><td><code>VLSFO 180VIS : 55MT</code></td><td>ISO 8217:2010 RMG 380 Max 0.5% S, Max 180 Vis.</td></tr>
+            <tr><td>HSFO 380CST</td><td><code>HSFO 380CST : 200MT</code></td><td>ISO 8217:2010 RMG 380 Max 3.5% S</td></tr>
+            <tr><td>HSFO 500CST</td><td><code>HSFO 500CST : 150MT</code></td><td>ISO 8217:2010 RMK 500 Max 3.5% S</td></tr>
+            <tr><td>HSFO 700CST</td><td><code>HSFO 700CST : 100MT</code></td><td>ISO 8217:2010 RMK 700 Max 3.5% S</td></tr>
+            <tr><td>LSMGO</td><td><code>LSMGO : 22MT</code></td><td>ISO 8217:2010 DMA Max 0.1% S</td></tr>
+            <tr><td>LSMGO 0.5%</td><td><code>LSMGO 0.5% : 30MT</code></td><td>ISO 8217:2010 DMA Max 0.5% S</td></tr>
+            <tr><td>MGO</td><td><code>MGO : 50MT</code></td><td>ISO 8217:2010 DMA</td></tr>
+            <tr><td>MDO</td><td><code>MDO : 80MT</code></td><td>ISO 8217:2010 DMB</td></tr>
+        </table>
+
+        <h4>수량 입력 형식</h4>
+        <table class="tbl">
+            <tr><th>형식</th><th>입력 예시</th><th>파싱 결과</th></tr>
+            <tr><td>고정 수량</td><td><code>VLSFO : 100MT</code></td><td>최소=100, 최대=100, 확정=100</td></tr>
+            <tr><td>범위 (~ 사용)</td><td><code>VLSFO : 55~100MT</code></td><td>최소=55, 최대=100, 확정=(비움)</td></tr>
+            <tr><td>범위 (- 사용)</td><td><code>VLSFO : 55-100MT</code></td><td>최소=55, 최대=100, 확정=(비움)</td></tr>
+        </table>
+
+        <div class="tip">MT 단위는 생략 가능합니다. <code>VLSFO : 100</code>도 인식됩니다.</div>
+    </div>
+</div>
+
+<!-- ==================== 인쿼리 파싱 - 가격/결제 ==================== -->
+<div class="feature" id="inquiry-price">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-007</span>
+        <span class="feature-title">인쿼리 파싱 - 가격 / 결제조건</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <h4>가격 입력 형식</h4>
+        <p>바이어/셀러 라인에서 업체명 뒤에 가격을 입력합니다. 유종이 여러 개면 <code>/</code>로 구분합니다.</p>
+        <table class="tbl">
+            <tr><th>형식</th><th>입력 예시</th><th>파싱 결과</th></tr>
+            <tr><td>단일 가격</td><td><code>홍콩이마린 1400 (30DDD)</code></td><td>유종1: $1,400</td></tr>
+            <tr><td>복수 가격</td><td><code>홍콩이마린 1370/1620 (30DDD)</code></td><td>유종1: $1,370 / 유종2: $1,620</td></tr>
+            <tr><td>3개 가격</td><td><code>홍콩이마린 1400/1650/1800 (30DDD)</code></td><td>유종1~3 순서대로</td></tr>
+            <tr><td>추가비용 포함</td><td><code>홍콩이마린 1400+500 (30DDD)</code></td><td>유종: $1,400 + Barge Charge: $500</td></tr>
+            <tr><td>복수 가격+추가비용</td><td><code>홍콩이마린 1370/1620+500 (30DDD)</code></td><td>유종1: $1,370 / 유종2: $1,620 + Barge: $500</td></tr>
+        </table>
+
+        <div class="warn">가격 개수와 유종 개수가 일치해야 합니다. 유종 3개인데 가격 2개면 에러가 발생합니다.</div>
+
+        <h4>결제조건 (Payment Terms)</h4>
+        <table class="tbl">
+            <tr><th>입력</th><th>의미</th></tr>
+            <tr><td><code>(7DDD)</code></td><td>공급일 기준 7일 후 결제</td></tr>
+            <tr><td><code>(15DDD)</code></td><td>공급일 기준 15일 후 결제</td></tr>
+            <tr><td><code>(30DDD)</code></td><td>공급일 기준 30일 후 결제</td></tr>
+            <tr><td><code>(45DDD)</code></td><td>공급일 기준 45일 후 결제</td></tr>
+            <tr><td><code>(60DDD)</code></td><td>공급일 기준 60일 후 결제</td></tr>
+            <tr><td><code>(90DDD)</code></td><td>공급일 기준 90일 후 결제</td></tr>
+            <tr><td><code>(CIA)</code></td><td>Cash In Advance (선불)</td></tr>
+            <tr><td><code>(COD)</code></td><td>Cash On Delivery (공급 시 결제)</td></tr>
+        </table>
+    </div>
+</div>
+
+<!-- ==================== 인쿼리 파싱 - 업체명 ==================== -->
+<div class="feature" id="inquiry-company">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-007</span>
+        <span class="feature-title">인쿼리 파싱 - 업체명 매핑 (한국어 약칭)</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <h4>한국어 약칭 자동 매핑</h4>
+        <p>자주 사용하는 업체는 <strong>한국어 약칭</strong>으로 입력해도 자동으로 정식 영문명으로 매핑됩니다.</p>
+        <table class="tbl">
+            <tr><th>한국어 약칭</th><th>자동 매핑 영문명</th></tr>
+            <tr><td>홍콩이마린</td><td>HONGKONG E-MARINE ...</td></tr>
+            <tr><td>금진</td><td>KEUMJIN ...</td></tr>
+            <tr><td>동림</td><td>DONGRIM PETROLEUM ...</td></tr>
+            <tr><td>프라임</td><td>PRIME BUNKER ...</td></tr>
+            <tr><td>로인스</td><td>ROINS ...</td></tr>
+            <tr><td>글로벌오프쇼어</td><td>GLOBAL OFFSHORE ...</td></tr>
+            <tr><td>코모션</td><td>COMOCEAN ...</td></tr>
+            <tr><td>파노코</td><td>PANOCO ...</td></tr>
+            <tr><td>옥주</td><td>OJ PETRO SALES CO., LTD.</td></tr>
+            <tr><td>포우처</td><td>FOUCHER TRADE LIMITED FZE</td></tr>
+            <tr><td>페트라</td><td>PETRA PRIME SHIPPING FZE</td></tr>
+        </table>
+
+        <h4>영문 정식명 직접 입력</h4>
+        <p>한국어 약칭이 등록되지 않은 업체는 영문명을 직접 입력하면 됩니다.</p>
+        <div class="codeblock">바이어 : HONGKONG E-MARINE SUPPLY SERVICE CORP., LTD. 1400 (30DDD)
+셀러 : KEUMJIN MARINE CO., LTD. 1300 (7DDD)</div>
+    </div>
+</div>
+
+<!-- ==================== 인쿼리 파싱 - 에이전트 ==================== -->
+<div class="feature" id="inquiry-agent">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-007</span>
+        <span class="feature-title">인쿼리 파싱 - 에이전트 정보</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <h4>에이전트 입력 형식</h4>
+        <p>에이전트 정보는 선택 사항이며, 여러 줄에 걸쳐 입력합니다.</p>
+        <div class="codeblock">AGENT : GLOBAL OFFSHORE MARINE SERVICE
+T.+82 51 715 9679
+E-mail : ops@globaloms.co.kr
+AGENT NAME : SONG, HYO SUNG</div>
+
+        <table class="tbl">
+            <tr><th>항목</th><th>키워드</th><th>예시</th><th>필수</th></tr>
+            <tr><td>업체명</td><td><code>AGENT :</code></td><td>GLOBAL OFFSHORE MARINE SERVICE</td><td>AGENT 입력 시 필수</td></tr>
+            <tr><td>전화번호</td><td><code>T.</code> 또는 <code>TEL</code></td><td>+82 51 715 9679</td><td>선택</td></tr>
+            <tr><td>이메일</td><td><code>E-mail :</code></td><td>ops@globaloms.co.kr</td><td>선택</td></tr>
+            <tr><td>담당자명</td><td><code>AGENT NAME :</code></td><td><code>AGENT NAME : SONG, HYO SUNG</code></td><td>선택</td></tr>
+        </table>
+
+        <div class="tip">에이전트 전체를 생략해도 파싱은 정상 동작합니다. 에이전트 없는 인쿼리도 지원됩니다.</div>
+    </div>
+</div>
+
+<!-- ==================== 인쿼리 파싱 - 전체 예시 ==================== -->
+<div class="feature" id="inquiry-examples">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-007</span>
+        <span class="feature-title">인쿼리 파싱 - 전체 입력 예시</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <h4>예시 1: 기본 (유종 1개)</h4>
+        <div class="codeblock">VESSEL NAME: SEA PIONEER
+IMO : 9334567
+DELIVERY PORT/AREA NAME: BUSAN
+DELIVERY WINDOW: 10-12TH APR 2026
+VLSFO 0.5% : 100MT
+바이어 : 홍콩이마린 1400 (30DDD)
+셀러 : 금진 1300 (7DDD)</div>
+
+        <h4>예시 2: 유종 2개 + 추가비용 + 에이전트</h4>
+        <div class="codeblock">VESSEL NAME: TONG RUN 7
+IMO : 9673563
+DELIVERY PORT/AREA NAME: BUSAN
+DELIVERY WINDOW: 16-20TH MAR 2026
+VLSFO : 55MT
+LSMGO : 22MT
+바이어 : HONGKONG E-MARINE SUPPLY SERVICE CORP., LTD. 1370/1620+500 (30DDD)
+셀러 : KEUMJIN MARINE CO., LTD. 1290/1540+500 (7DDD)
+서플 : Roins
+AGENT : GLOBAL OFFSHORE MARINE SERVICE
+T.+82 51 715 9679
+E-mail : ops@globaloms.co.kr
+AGENT NAME : SONG, HYO SUNG</div>
+
+        <h4>예시 3: 유종 3개 + 수량 범위 + 비고</h4>
+        <div class="codeblock">VESSEL NAME: XIN SHENG SHENG 6
+IMO : 8358013
+DELIVERY PORT/AREA NAME: YOSU
+DELIVERY WINDOW: 01-03RD AUG 2026
+HSFO 380CST : 200MT
+VLSFO 180VIS : 55~100MT
+LSMGO 0.1% : 22~50MT
+바이어 : 홍콩이마린 1400/1650/1800+500 (30DDD)
+셀러 : 동림 1300/1550/1700+500 (7DDD)
+서플 : Roins
+AGENT : GLOBAL OFFSHORE MARINE SERVICE
+T.+82 51 715 9679
+E-mail : ops@globaloms.co.kr
+AGENT NAME : SONG, HYO SUNG
+비고 : STEM CONFIRMED</div>
+
+        <div class="warn">
+            <strong>주의사항:</strong><br>
+            - 가격 개수 = 유종 개수여야 합니다 (유종 3개면 가격도 3개: 1400/1650/1800)<br>
+            - IMO는 숫자만 입력 (7자리)<br>
+            - 결제조건은 반드시 괄호로 감싸야 합니다: (30DDD)
+        </div>
+    </div>
+</div>
+
+<!-- ==================== ETA + DDD ==================== -->
+<div class="feature" id="eta-ddd">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-013</span>
+        <span class="feature-title">ETA 필드 + 3단계 DDD 자동 계산</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <h4>기능 설명</h4>
+        <p>주문 상세에 <strong>ETA(선박 도착 예정일)</strong> 필드가 추가되었습니다. ETA, 공급예정일, 공급확정일 중 하나가 변경되면 <strong>지급기한일(PayDueDate)이 자동으로 재계산</strong>됩니다.</p>
+
+        <h4>사용 방법</h4>
+        <ol class="step">
+            <li>바이어 관리 → 주문 클릭 → 상세 팝업 열기</li>
+            <li><strong>ETA</strong> 날짜 입력 (공급요청일과 최종완료일 사이에 위치)</li>
+            <li>날짜 선택 즉시 → 지급기한일이 자동 갱신됨</li>
+            <li>저장하면 ETA 값이 DB에 저장됨</li>
+        </ol>
+
+        <h4>지급기한일 계산 우선순위</h4>
+        <p>아래 순서로 기준일을 선택하여 DDD를 계산합니다. 상위 값이 있으면 하위 값은 무시됩니다.</p>
+        <table class="tbl">
+            <tr><th>우선순위</th><th>기준일</th><th>설명</th></tr>
+            <tr><td><strong>1순위</strong></td><td>공급확정일 (SupplyCompleteDate)</td><td>실제 공급이 완료된 날짜</td></tr>
+            <tr><td><strong>2순위</strong></td><td>공급예정일 (EstSupplyStartDate)</td><td>공급 예정 시작일</td></tr>
+            <tr><td><strong>3순위</strong></td><td>ETA (선박 도착 예정일)</td><td>선박이 항구에 도착하는 예정일</td></tr>
+            <tr><td><strong>4순위</strong></td><td>공급요청일 (ReqSupplyStartDate)</td><td>바이어가 요청한 공급일</td></tr>
+        </table>
+
+        <h4>계산 예시 (30DDD, 홍콩 선사)</h4>
+        <table class="tbl">
+            <tr><th>기준일</th><th>+29일</th><th>주말/공휴일 조정</th><th>최종 지급기한일</th></tr>
+            <tr><td>ETA: 2026-04-04</td><td>2026-05-03 (일)</td><td>-1일=토 → -1일=금(5/1 노동절) → -1일</td><td><strong>2026-04-30 (목)</strong></td></tr>
+        </table>
+
+        <h4>공휴일 자동 반영</h4>
+        <p>선사(ShipCompany)의 <strong>국가별 공휴일이 자동으로 반영</strong>됩니다. 100개국 이상 지원되며, 외부 API(Nager.Date)에서 실시간으로 공휴일 데이터를 가져옵니다.</p>
+        <table class="tbl">
+            <tr><th>국가</th><th>반영 공휴일 예시</th></tr>
+            <tr><td>한국 (KOR)</td><td>설날, 추석, 광복절, 한글날 등</td></tr>
+            <tr><td>홍콩 (HKG)</td><td>노동절(5/1), 국경절, 중추절 등</td></tr>
+            <tr><td>UAE (ARE)</td><td>이슬람 공휴일, 국경일 등</td></tr>
+            <tr><td>싱가포르 (SGP)</td><td>National Day, Deepavali 등</td></tr>
+        </table>
+
+        <div class="tip">
+            <strong>자동 트리거:</strong> ETA, 공급예정일, 공급확정일 중 하나만 변경해도 지급기한일이 즉시 재계산됩니다. PayType(결제유형) 변경 시에도 재계산됩니다.
+        </div>
+    </div>
+</div>
+
+<!-- ==================== 서류 편집기 - 사용법 ==================== -->
+<div class="feature" id="editor-overview">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-018</span>
+        <span class="feature-title">서류(PDF/이미지) 편집기 - 사용법</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <h4>기능 설명</h4>
+        <p>BDR, 인보이스 등 서류 PDF/이미지에서 <strong>특정 내용(업체명, 선박명, 워터마크 등)을 지워서 수정본</strong>을 만듭니다. 외부 편집 도구 없이 인트라넷에서 바로 편집 가능합니다.</p>
+
+        <h4>편집기 열기</h4>
+        <ol class="step">
+            <li>바이어 관리 또는 셀러 관리 → 주문 상세 열기</li>
+            <li>서류관리 → 서류보기에서 PDF/이미지 파일 확인</li>
+            <li>파일 옆의 <strong>연필(&#9998;) 아이콘</strong> 클릭</li>
+            <li>편집 모달이 열리면서 해당 파일이 자동으로 로드됨</li>
+        </ol>
+
+        <h4>파일 직접 선택 (로컬 파일)</h4>
+        <ol class="step">
+            <li>편집 모달에서 <strong>"파일"</strong> 버튼 클릭</li>
+            <li>내 컴퓨터에서 PDF 또는 이미지 파일 선택</li>
+            <li>파일이 캔버스에 로드됨</li>
+        </ol>
+
+        <h4>지원 파일 형식</h4>
+        <table class="tbl">
+            <tr><th>형식</th><th>확장자</th><th>비고</th></tr>
+            <tr><td>PDF</td><td>.pdf</td><td>멀티페이지 지원 (모든 페이지 세로로 표시)</td></tr>
+            <tr><td>이미지</td><td>.png, .jpg, .jpeg</td><td>단일 이미지</td></tr>
+        </table>
+
+        <div class="tip">PDF는 브라우저에서 직접 렌더링됩니다 (서버 의존 없음). 멀티페이지 PDF는 모든 페이지가 세로로 이어붙여져 표시됩니다.</div>
+    </div>
+</div>
+
+<!-- ==================== 서류 편집기 - 모드 상세 ==================== -->
+<div class="feature" id="editor-modes">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-018</span>
+        <span class="feature-title">서류 편집기 - 편집 모드 상세</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <h4>브러시 모드 (자유 칠하기)</h4>
+        <table class="tbl">
+            <tr><th>항목</th><th>설명</th></tr>
+            <tr><td>활성화</td><td><strong>"브러시"</strong> 버튼 클릭</td></tr>
+            <tr><td>사용법</td><td>마우스로 클릭+드래그하여 칠하기</td></tr>
+            <tr><td>브러시 크기</td><td>슬라이더로 5~80px 조절 (기본 25px)</td></tr>
+            <tr><td>표시</td><td>빨간 하이라이트로 표시 (실제 지우기는 저장 시)</td></tr>
+        </table>
+
+        <h4>사각형 모드 (영역 선택)</h4>
+        <table class="tbl">
+            <tr><th>항목</th><th>설명</th></tr>
+            <tr><td>활성화</td><td><strong>"사각형"</strong> 버튼 클릭</td></tr>
+            <tr><td>사용법</td><td>시작점 클릭 → 끝점까지 드래그 → 사각형 영역 선택</td></tr>
+            <tr><td>최소 크기</td><td>5x5 픽셀</td></tr>
+            <tr><td>표시</td><td>빨간 반투명 사각형으로 표시</td></tr>
+        </table>
+
+        <h4>색상지정 모드 (워터마크 제거용)</h4>
+        <table class="tbl">
+            <tr><th>항목</th><th>설명</th></tr>
+            <tr><td>활성화</td><td><strong>"색상지정"</strong> 버튼 클릭</td></tr>
+            <tr><td>사용법</td><td>문서에서 배경색 부분을 클릭 → 그 색으로 지우기 색상 고정</td></tr>
+            <tr><td>용도</td><td>워터마크가 심한 문서에서 자동 배경 추출이 잘 안 될 때 사용</td></tr>
+            <tr><td>해제</td><td>다른 모드(브러시/사각형)로 전환하면 자동 배경 모드로 복귀</td></tr>
+        </table>
+
+        <h4>되돌리기 / 초기화</h4>
+        <table class="tbl">
+            <tr><th>기능</th><th>동작</th></tr>
+            <tr><td><strong>"되돌리기"</strong> 버튼</td><td>마지막 브러시 스트로크 / 사각형 1개를 취소 (최대 30회)</td></tr>
+            <tr><td><strong>"초기화"</strong> 버튼</td><td>모든 편집 내용을 지우고 원본 상태로 복원</td></tr>
+        </table>
+    </div>
+</div>
+
+<!-- ==================== 서류 편집기 - 저장 ==================== -->
+<div class="feature" id="editor-save">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-018</span>
+        <span class="feature-title">서류 편집기 - 저장 및 파일명 규칙</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <h4>저장 방법</h4>
+        <ol class="step">
+            <li>편집 완료 후 <strong>"저장"</strong> 버튼 클릭</li>
+            <li>빨간 하이라이트 영역이 주변 배경색으로 자동 채워짐</li>
+            <li><strong>원본 파일은 유지</strong>되고, 편집본이 새 파일로 추가됨</li>
+            <li>서류보기 목록에 편집본이 새로 나타남</li>
+        </ol>
+
+        <h4>지우기 알고리즘</h4>
+        <table class="tbl">
+            <tr><th>모드</th><th>동작 방식</th></tr>
+            <tr><td><strong>자동 배경</strong> (기본)</td><td>빨간 영역의 각 픽셀마다 주변 반경을 확장하며 배경 픽셀 30개를 수집 → RGB 평균값으로 채움. 글자(밝기 350 이하)는 건너뜀</td></tr>
+            <tr><td><strong>색상지정</strong> 모드</td><td>사용자가 클릭한 색상으로 단색 채움. 워터마크가 심한 문서에서 유용</td></tr>
+        </table>
+
+        <h4>파일명 규칙</h4>
+        <table class="tbl">
+            <tr><th>원본 파일명</th><th>편집본 파일명</th></tr>
+            <tr><td><code>_BDR_20260326A9PP.pdf</code></td><td><code>_BDR_20260326A9PP<strong>E</strong>.pdf</code></td></tr>
+            <tr><td>이미 E가 있는 경우</td><td><code>_BDR_20260326A9PP<strong>E2</strong>.pdf</code></td></tr>
+            <tr><td>E2도 있으면</td><td><code>_BDR_20260326A9PP<strong>E3</strong>.pdf</code></td></tr>
+        </table>
+
+        <h4>저장 형식</h4>
+        <table class="tbl">
+            <tr><th>원본 형식</th><th>저장 형식</th></tr>
+            <tr><td>PDF (단일/멀티페이지)</td><td>PDF (멀티페이지 유지)</td></tr>
+            <tr><td>PNG / JPG</td><td>원본과 동일 형식</td></tr>
+        </table>
+
+        <div class="warn">편집본은 새 파일로 생성되므로 원본은 절대 변경되지 않습니다. 안심하고 편집하세요.</div>
+    </div>
+</div>
+
+<!-- ==================== 외부 인쿼리 API ==================== -->
+<div class="feature" id="ext-api">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">EXT-API</span>
+        <span class="feature-title">외부 인쿼리 API (자동 주문 생성)</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <h4>기능 설명</h4>
+        <p>외부 시스템에서 인쿼리 텍스트를 HTTP API로 전송하면, 웹에서 인쿼리 파싱 → 주문 등록하는 것과 <strong>동일하게</strong> 바이어 주문 + 셀러 주문이 자동 생성됩니다. 내부적으로 웹과 같은 API를 순서대로 호출하므로 결과가 100% 동일합니다.</p>
+
+        <h4>API 정보</h4>
+        <table class="tbl">
+            <tr><th>항목</th><th>값</th></tr>
+            <tr><td>URL</td><td><code>POST https://api.seanergyp.com/api/ExternalInquiry/Create</code></td></tr>
+            <tr><td>인증</td><td>헤더 <code>X-Api-Key: 발급받은키</code></td></tr>
+            <tr><td>Content-Type</td><td><code>application/json; charset=utf-8</code></td></tr>
+            <tr><td>본문</td><td>JSON <code>{"text": "인쿼리 텍스트"}</code></td></tr>
+        </table>
+
+        <h4>요청 본문 형식</h4>
+        <p>JSON 객체에 <code>text</code> 필드 하나만 넣으면 됩니다. 줄바꿈은 <code>\n</code>으로 구분합니다.</p>
+        <div class="codeblock">{
+  "text": "VESSEL NAME: DIAMOND SEA\n
+IMO : 9112233\n
+DELIVERY PORT/AREA NAME: YOSU\n
+DELIVERY WINDOW: 15-17TH MAR 2026\n
+HSFO 380CST : 400MT\n
+VLSFO : 100MT\n
+LSMGO 0.1% : 30MT\n
+바이어 : 홍콩이마린 1350/1550/1750+800 (30DDD)\n
+셀러 : 동림 1250/1450/1650+500 (7DDD)\n
+AGENT : GLOBAL OFFSHORE MARINE SERVICE\n
+T.+82 51 715 9679\n
+E-mail : ops@globaloms.co.kr\n
+AGENT NAME : CHOI, SUNG HO\n
+비고 : STEM CONFIRMED"
+}</div>
+
+        <h4>호출 예시 (curl)</h4>
+        <div class="codeblock">curl -X POST \
+  https://api.seanergyp.com/api/ExternalInquiry/Create \
+  -H "Content-Type: application/json; charset=utf-8" \
+  -H "X-Api-Key: sk-sngy-8f2a4c6e9b1d3f5a7c0e2b4d" \
+  -d '{"text":"VESSEL NAME: DIAMOND SEA\nIMO..."}'</div>
+
+        <h4>호출 예시 (PowerShell)</h4>
+        <div class="codeblock">$body = @{
+  text = "VESSEL NAME: DIAMOND SEA`n" +
+         "IMO : 9112233`n" +
+         "DELIVERY PORT/AREA NAME: YOSU`n" +
+         "DELIVERY WINDOW: 15-17TH MAR 2026`n" +
+         "HSFO 380CST : 400MT`n" +
+         "VLSFO : 100MT`n" +
+         "LSMGO 0.1% : 30MT`n" +
+         "바이어 : 홍콩이마린 1350/1550/1750+800 (30DDD)`n" +
+         "셀러 : 동림 1250/1450/1650+500 (7DDD)`n" +
+         "AGENT : GLOBAL OFFSHORE MARINE SERVICE`n" +
+         "T.+82 51 715 9679`n" +
+         "E-mail : ops@globaloms.co.kr`n" +
+         "AGENT NAME : CHOI, SUNG HO`n" +
+         "비고 : STEM CONFIRMED"
+} | ConvertTo-Json
+
+Invoke-RestMethod `
+  -Method POST `
+  -Uri "https://api.seanergyp.com/api/ExternalInquiry/Create" `
+  -ContentType "application/json; charset=utf-8" `
+  -Headers @{"X-Api-Key"="sk-sngy-8f2a4c6e9b1d3f5a7c0e2b4d"} `
+  -Body ([System.Text.Encoding]::UTF8.GetBytes($body))</div>
+
+        <h4>호출 예시 (Python)</h4>
+        <div class="codeblock">import requests
+
+url = "https://api.seanergyp.com/api/ExternalInquiry/Create"
+headers = {
+    "X-Api-Key": "sk-sngy-8f2a4c6e9b1d3f5a7c0e2b4d",
+    "Content-Type": "application/json; charset=utf-8"
+}
+data = {
+    "text": """VESSEL NAME: DIAMOND SEA
+IMO : 9112233
+DELIVERY PORT/AREA NAME: YOSU
+DELIVERY WINDOW: 15-17TH MAR 2026
+HSFO 380CST : 400MT
+VLSFO : 100MT
+LSMGO 0.1% : 30MT
+바이어 : 홍콩이마린 1350/1550/1750+800 (30DDD)
+셀러 : 동림 1250/1450/1650+500 (7DDD)
+AGENT : GLOBAL OFFSHORE MARINE SERVICE
+T.+82 51 715 9679
+E-mail : ops@globaloms.co.kr
+AGENT NAME : CHOI, SUNG HO
+비고 : STEM CONFIRMED"""
+}
+
+response = requests.post(url, json=data, headers=headers)
+print(response.json())</div>
+
+        <h4>응답 예시 (성공)</h4>
+        <div class="codeblock">{
+  "code": 200,
+  "message": "주문 생성 완료",
+  "data": {
+    "orderId": "20260331WMQG",
+    "vesselName": "DIAMOND SEA",
+    "port": "YOSU",
+    "buyerCompany": "홍콩이마린",
+    "sellerCompany": "동림",
+    "oilCount": 3,
+    "payType": "30DDD",
+    "buyerPayDueDate": "2026-04-13",
+    "sellerPayDueDate": "2026-03-23"
+  }
+}</div>
+
+        <h4>응답 필드 설명</h4>
+        <table class="tbl">
+            <tr><th>필드</th><th>설명</th></tr>
+            <tr><td><code>orderId</code></td><td>생성된 주문번호 (바이어 관리에서 조회 가능)</td></tr>
+            <tr><td><code>vesselName</code></td><td>파싱된 선박명</td></tr>
+            <tr><td><code>port</code></td><td>파싱된 항구명</td></tr>
+            <tr><td><code>buyerCompany</code></td><td>매칭된 바이어 업체명</td></tr>
+            <tr><td><code>sellerCompany</code></td><td>매칭된 셀러 업체명</td></tr>
+            <tr><td><code>oilCount</code></td><td>유종 개수</td></tr>
+            <tr><td><code>payType</code></td><td>결제유형 (30DDD, 7DDD, CIA 등)</td></tr>
+            <tr><td><code>buyerPayDueDate</code></td><td>바이어 지급기한일</td></tr>
+            <tr><td><code>sellerPayDueDate</code></td><td>셀러 지급기한일</td></tr>
+        </table>
+
+        <h4>응답 예시 (실패)</h4>
+        <div class="codeblock">// API Key 없거나 틀림
+{"code": 401, "message": "유효하지 않은 API Key입니다."}
+
+// 텍스트 비어있음
+{"code": 400, "message": "텍스트가 비어있습니다."}
+
+// 파싱 실패 (필수 항목 누락)
+{"code": 400, "message": "파싱 실패",
+ "errors": ["선박명(VESSEL NAME)을 찾을 수 없습니다."]}
+
+// 업체를 DB에서 못 찾음
+{"code": 400,
+ "message": "바이어 업체를 찾을 수 없습니다: ABC Trading"}</div>
+
+        <h4>텍스트 입력 규칙</h4>
+        <p>인쿼리 파싱과 동일한 형식입니다. 자세한 내용은 위의 <a href="#inquiry-format">입력 형식 상세</a>, <a href="#inquiry-oil">유종/규격/수량</a>, <a href="#inquiry-price">가격/결제조건</a>, <a href="#inquiry-examples">전체 입력 예시</a>를 참고하세요.</p>
+
+        <h4>자동 생성되는 항목</h4>
+        <table class="tbl">
+            <tr><th>항목</th><th>설명</th></tr>
+            <tr><td>바이어 주문</td><td>유종, 가격, 수량, 에이전트, 결제유형 전부 포함</td></tr>
+            <tr><td>셀러 주문</td><td>판매업체 자동 연결, 셀러 단가 입력</td></tr>
+            <tr><td>추가비용</td><td>+500 → BARGE CHARGE 매출/매입 자동 분리 생성</td></tr>
+            <tr><td>지급기한일</td><td>DDD 자동 계산 (공휴일 100개국 반영, 주말 제외)</td></tr>
+            <tr><td>에이전트</td><td>업체명, 담당자, 전화번호, 이메일 자동 입력</td></tr>
+            <tr><td>선박</td><td>DB에 없으면 자동 생성 (선박명 + IMO)</td></tr>
+        </table>
+
+        <h4>동시 호출</h4>
+        <p>여러 요청이 동시에 들어와도 <strong>순차적으로 1건씩</strong> 처리됩니다. 주문번호 중복이 발생하지 않습니다.</p>
+
+        <h4>API Key 관리</h4>
+        <table class="tbl">
+            <tr><th>작업</th><th>방법</th></tr>
+            <tr><td>새 키 발급</td><td>DB <code>ExternalApi</code> 테이블에 INSERT 1줄</td></tr>
+            <tr><td>키 폐기</td><td>해당 행 DELETE</td></tr>
+            <tr><td>업체별 별도 키</td><td>같은 구조로 행 추가, <code>AuthKey01</code>만 다르게</td></tr>
+            <tr><td>키 유출 시</td><td>즉시 DELETE 후 새 키 INSERT</td></tr>
+        </table>
+
+        <div class="warn">
+            <strong>보안 주의:</strong><br>
+            - API Key는 비밀번호와 같습니다. 절대 공개하지 마세요.<br>
+            - 반드시 HTTPS로만 호출하세요.<br>
+            - 키가 유출되면 즉시 DB에서 삭제하고 새 키를 발급하세요.
+        </div>
+    </div>
+</div>
+
+</main>
+
+<script>
+function activate(el) {
+    document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+    el.classList.add('active');
+}
+// 스크롤 시 사이드바 자동 하이라이트
+const sidebarLinks = document.querySelectorAll('.sidebar a[href^="#"]');
+const sections = [];
+sidebarLinks.forEach(link => {
+    const id = link.getAttribute('href').substring(1);
+    const el = document.getElementById(id);
+    if (el) sections.push({ id, el, link });
+});
+window.addEventListener('scroll', () => {
+    let current = sections[0];
+    for (const s of sections) {
+        if (s.el.getBoundingClientRect().top <= 80) current = s;
+    }
+    if (current) {
+        sidebarLinks.forEach(a => a.classList.remove('active'));
+        current.link.classList.add('active');
+        current.link.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+});
+if (location.hash) {
+    const el = document.querySelector(location.hash);
+    if (el) { el.scrollIntoView(); el.classList.remove('collapsed'); }
+}
+</script>
+</body>
+</html>
