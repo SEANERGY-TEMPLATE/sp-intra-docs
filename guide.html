@@ -75,6 +75,9 @@ a{color:#4361ee;text-decoration:none}
     <div class="nav-section">ETA / DDD</div>
     <a href="#eta-ddd" onclick="activate(this)">ETA + 자동 DDD 계산</a>
 
+    <div class="nav-section">변경 이력</div>
+    <a href="#change-log" onclick="activate(this)">수정 이력 로그</a>
+
     <div class="nav-section">서류 편집</div>
     <a href="#editor-overview" onclick="activate(this)">편집기 사용법</a>
     <a href="#editor-modes" onclick="activate(this)">편집 모드 상세</a>
@@ -543,6 +546,55 @@ AGENT NAME : SONG, HYO SUNG
         <div class="tip">
             <strong>자동 트리거:</strong> ETA, 공급예정일, 공급확정일 중 하나만 변경해도 지급기한일이 즉시 재계산됩니다. PayType(결제유형) 변경 시에도 재계산됩니다.
         </div>
+    </div>
+</div>
+
+<!-- ==================== 변경 이력 ==================== -->
+<div class="feature" id="change-log">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-015</span>
+        <span class="feature-title">주문 수정 이력 로그</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <h4>기능 설명</h4>
+        <p>주문을 수정할 때마다 <strong>누가, 언제, 무엇을 변경했는지</strong> 자동으로 기록됩니다. "변경 이력" 버튼을 클릭하면 전체 수정 내역을 확인할 수 있습니다.</p>
+
+        <h4>수정자 표시</h4>
+        <p>주문 상세 상단의 <strong>"최근 업데이트"</strong> 옆에 마지막 수정자 이름이 표시됩니다.</p>
+        <div class="codeblock">최근 업데이트  하지혁  2026.03.31 13:17</div>
+
+        <h4>변경 이력 확인 방법</h4>
+        <ol class="step">
+            <li>바이어 관리 → 주문 클릭 → 상세 팝업 열기</li>
+            <li>상단의 <strong>"변경 이력"</strong> 버튼 클릭</li>
+            <li>팝업에 수정 내역 목록이 표시됨 (일시, 수정자, 내용)</li>
+        </ol>
+
+        <h4>변경 이력 예시</h4>
+        <table class="tbl">
+            <tr><th>일시</th><th>수정자</th><th>내용</th></tr>
+            <tr><td>2026.03.31 13:17</td><td>하지혁</td><td>주문 생성</td></tr>
+            <tr><td>2026.03.31 14:00</td><td>하지혁</td><td>ETA: 2026-04-04</td></tr>
+            <tr><td>2026.03.31 15:30</td><td>김동현</td><td>VLSFO 확정수량: 50 → 100, 항구: BUSAN → YOSU</td></tr>
+            <tr><td>2026.03.31 16:00</td><td>하지혁</td><td>인보이스 발송</td></tr>
+            <tr><td>2026.03.31 16:30</td><td>하지혁</td><td>노미네이션 발송</td></tr>
+        </table>
+
+        <h4>자동 추적되는 항목</h4>
+        <table class="tbl">
+            <tr><th>카테고리</th><th>항목</th></tr>
+            <tr><td>주문 기본</td><td>상태, ETA, 공급요청일, 공급예정일, 공급완료일, 항구, 주문유형, 거래유형, 벙커온리, 요청사항</td></tr>
+            <tr><td>업체/담당</td><td>에이전트, 에이전트 담당자/연락처/이메일, 선사 담당자/연락처/이메일</td></tr>
+            <tr><td>결제</td><td>결제유형, 지급기한, 지급완료일, 인보이스 발신, 세금계산서 발행, BDR 수신</td></tr>
+            <tr><td>유종</td><td>확정수량, 매출단가, 매입단가, 최소/최대수량, 생산자, BDR 발행자</td></tr>
+            <tr><td>판매업체</td><td>판매사, 판매담당자/연락처/이메일</td></tr>
+            <tr><td>바지선</td><td>바지 업체, 바지 담당자, 바지선명</td></tr>
+            <tr><td>공급 일정</td><td>출하예정일, 출하일, 공급완료일(유종별)</td></tr>
+            <tr><td>발송</td><td>인보이스 발송, 노미네이션 발송, 확인서 발송, 메일 발송</td></tr>
+        </table>
+
+        <div class="tip">변경 이력은 <strong>EF Core ChangeTracker</strong>를 사용하여 자동 감지됩니다. 새 필드가 추가되어도 자동으로 추적됩니다. 변경 없이 저장하면 "주문 수정"으로 기록됩니다.</div>
     </div>
 </div>
 
