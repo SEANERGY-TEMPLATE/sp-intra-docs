@@ -92,7 +92,7 @@ a{color:#4361ee;text-decoration:none}
     <div class="nav-section">개요</div>
     <a href="#overview" class="active" onclick="activate(this)">기능 목록</a>
 
-    <div class="nav-section">기능 상세 (14건)</div>
+    <div class="nav-section">기능 상세 (15건)</div>
     <a href="#NEW-001" onclick="activate(this)">NEW-001 대문자 변환 <span class="status s-done">✅ 완료</span></a>
     <a href="#NEW-002" onclick="activate(this)">NEW-002 AED 디르함 <span class="status s-done">✅ 완료</span></a>
     <a href="#NEW-003" onclick="activate(this)">NEW-003 IBK 은행 <span class="status s-done">✅ 완료</span></a>
@@ -111,6 +111,7 @@ a{color:#4361ee;text-decoration:none}
     <a href="#NEW-016" onclick="activate(this)">NEW-016 문의 크롤링 <span class="status s-wait">대기</span></a>
     <a href="#NEW-017" onclick="activate(this)">NEW-017 서비스 모니터링 <span class="status s-wait">대기</span></a>
     <a href="#NEW-018" onclick="activate(this)">NEW-018 서류 편집기 <span class="status s-done">✅ 완료</span></a>
+    <a href="#NEW-019" onclick="activate(this)">NEW-019 입금확인+리마인더 <span class="status s-wait">대기</span></a>
 
     <div class="nav-section">추가 기능</div>
     <a href="#EXT-API" onclick="activate(this)">외부 인쿼리 API <span class="status s-done">✅ 완료</span></a>
@@ -139,6 +140,7 @@ a{color:#4361ee;text-decoration:none}
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-016</span></td><td>홈페이지 문의 크롤링 (Playwright)</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-017</span></td><td>서비스 상태 모니터링 대시보드</td><td>미정</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-018</span></td><td>서류(PDF/이미지) 내용 편집기</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-done">✅ 완료</span></td><td>-</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-019</span></td><td>입금 자동 확인 + 페이먼트 리마인더</td><td>미정</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
 </table>
 
 <!-- ==================== NEW-001 ==================== -->
@@ -1304,6 +1306,80 @@ public virtual UserAccount ModUser { get; set; }</pre>
         </table>
         <h4>참고사항</h4>
         <p>PDF 렌더링은 클라이언트(pdf.js)에서 처리, 서버 의존 없음. 편집은 Canvas 위 마스크 방식 (원본 변경 없이 표시만). 저장 시에만 마스크 영역을 배경색으로 채워서 최종 이미지 생성. 고정색 모드는 워터마크가 심한 문서에서 유용.</p>
+    </div>
+</div>
+
+<!-- ==================== NEW-019 ==================== -->
+<div class="feature" id="NEW-019">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-019</span>
+        <span class="feature-title">입금 자동 확인 + 페이먼트 리마인더</span>
+        <span class="feature-priority p-high">상</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-31</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">우선순위</div><div class="value">상</div></div>
+            <div class="meta-item"><div class="label">담당자</div><div class="value">미정</div></div>
+        </div>
+        <h4>배경/목적</h4>
+        <p>현재 입금 확인을 수동으로 하고 있음. 은행 API로 입금 여부를 자동 확인하고, 지급기한일 기준으로 바이어에게 페이먼트 리마인더 메일을 자동 발송하여 업무 효율화.</p>
+
+        <h4>Part A — 입금 자동 확인</h4>
+        <ol>
+            <li>은행 API 연동하여 입금 내역 자동 조회 (은행사 추후 결정)</li>
+            <li>입금 확인되면 해당 주문의 <code>PayCompleteDate</code> (지급완료일) 자동 업데이트</li>
+            <li>주문 상태를 "정산완료"로 자동 변경</li>
+            <li>변경 이력에 "입금 확인 (자동)" 로그 기록</li>
+            <li>백그라운드 서비스로 주기적 조회 (예: 30분마다)</li>
+        </ol>
+
+        <h4>Part B — 페이먼트 리마인더 (바이어 대상)</h4>
+        <ol>
+            <li>지급기한일 <strong>2일 전</strong> — 첫 번째 리마인더 메일 발송</li>
+            <li>지급기한일 <strong>1일 전</strong> — 두 번째 리마인더 메일 발송</li>
+            <li>지급기한일 <strong>당일</strong> — 세 번째 리마인더 메일 발송</li>
+            <li>지급기한일 <strong>지남 (미입금)</strong> — 연체 알림 메일 발송</li>
+            <li>이미 입금 완료된 주문은 리마인더 발송 안 함</li>
+            <li>리마인더 발송 이력을 OrderLog에 기록</li>
+            <li>기존 OutboundMailer 사용</li>
+            <li>백그라운드 서비스로 매일 오전 9시 자동 체크</li>
+        </ol>
+
+        <h4>영향 범위</h4>
+        <ul class="checklist">
+            <li class="checked">바이어 관리 — 입금 상태 자동 업데이트</li>
+            <li class="unchecked">셀러 관리</li>
+            <li class="checked">정산 관리 — 지급완료일 자동 세팅</li>
+            <li class="checked">이메일 시스템 — 리마인더 메일 템플릿 신규</li>
+            <li class="unchecked">업체 관리</li>
+            <li class="unchecked">회원 관리</li>
+            <li class="unchecked">DB 스키마 변경</li>
+            <li class="checked">신규 API 필요 — 은행 연동 + 리마인더 상태 조회</li>
+            <li class="checked">기존 API 수정 — OrderSettlement 자동 업데이트</li>
+        </ul>
+
+        <h4>API 설계</h4>
+        <table class="tbl">
+            <tr><th>Method</th><th>Endpoint</th><th>설명</th><th>신규/수정</th></tr>
+            <tr><td>POST</td><td><code>/api/Payment/CheckDeposit</code></td><td>수동 입금 확인 트리거</td><td>신규</td></tr>
+            <tr><td>GET</td><td><code>/api/Payment/ReminderStatus</code></td><td>리마인더 발송 현황 조회</td><td>신규</td></tr>
+            <tr><td>-</td><td>BackgroundService</td><td>자동 입금 확인 (30분) + 리마인더 (매일 9시)</td><td>신규</td></tr>
+        </table>
+
+        <h4>메일 템플릿</h4>
+        <table class="tbl">
+            <tr><th>시점</th><th>제목</th><th>내용</th></tr>
+            <tr><td>D-2</td><td>[Seanergy] Payment Reminder - Invoice {주문번호}</td><td>지급기한 2일 전 안내</td></tr>
+            <tr><td>D-1</td><td>[Seanergy] Payment Reminder - Invoice {주문번호}</td><td>지급기한 1일 전 안내</td></tr>
+            <tr><td>D-day</td><td>[Seanergy] Payment Due Today - Invoice {주문번호}</td><td>오늘 지급기한 안내</td></tr>
+            <tr><td>연체</td><td>[Seanergy] Payment Overdue - Invoice {주문번호}</td><td>지급기한 초과 안내</td></tr>
+        </table>
+
+        <h4>참고사항</h4>
+        <p>은행사 결정 후 API 연동 방식 확정. Part B(리마인더)는 은행 API 없이도 독립 구현 가능 — 지급기한일과 PayCompleteDate만 비교하면 됨.</p>
     </div>
 </div>
 
