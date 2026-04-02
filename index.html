@@ -361,19 +361,20 @@ a{color:#4361ee;text-decoration:none}
     <div class="feature-body">
         <div class="meta">
             <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-23</div></div>
-            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value" style="color:#2e7d32;font-weight:700">✅ 완료</div></div>
             <div class="meta-item"><div class="label">우선순위</div><div class="value">중</div></div>
+            <div class="meta-item"><div class="label">담당자</div><div class="value">A 개발자(김동현)</div></div>
         </div>
         <h4>배경/목적</h4>
         <p>지급기한(PayDueDate)이 언제인지 한눈에 파악하기 어려움. 태그 형태로 날짜를 표시하고 기한 임박 시 색상 경고 필요.</p>
         <h4>색상 규칙</h4>
         <table class="tbl">
-            <tr><th>조건</th><th>색상</th><th>예시</th></tr>
-            <tr><td>3일 이상 여유</td><td style="background:#e0e0e0;text-align:center;border-radius:4px">회색</td><td><span style="background:#e0e0e0;padding:2px 10px;border-radius:10px;font-size:12px">3/28</span></td></tr>
-            <tr><td>2일 전</td><td style="background:#FFF3CD;text-align:center;border-radius:4px">노란색</td><td><span style="background:#FFF3CD;padding:2px 10px;border-radius:10px;font-size:12px">3/25</span></td></tr>
-            <tr><td>1일 전</td><td style="background:#FFE0B2;text-align:center;border-radius:4px">주황색</td><td><span style="background:#FFE0B2;padding:2px 10px;border-radius:10px;font-size:12px">3/24</span></td></tr>
-            <tr><td>당일 (D-Day)</td><td style="background:#FFCDD2;text-align:center;border-radius:4px">빨간색</td><td><span style="background:#FFCDD2;padding:2px 10px;border-radius:10px;font-size:12px">3/23</span></td></tr>
-            <tr><td>기한 초과</td><td style="background:#EF5350;color:#fff;text-align:center;border-radius:4px">진한 빨강</td><td><span style="background:#EF5350;color:#fff;padding:2px 10px;border-radius:10px;font-size:12px">3/20</span></td></tr>
+            <tr><th>조건</th><th>배경색</th><th>글자색</th><th>예시</th></tr>
+            <tr><td>3일+ 여유</td><td style="background:#E0E0E0;text-align:center;border-radius:4px">회색 (#E0E0E0)</td><td>#333</td><td><span style="background:#E0E0E0;color:#333;padding:2px 10px;border-radius:4px;font-size:12px;font-weight:bold">3/28</span></td></tr>
+            <tr><td>2일 전</td><td style="background:#FFF3CD;text-align:center;border-radius:4px">노란색 (#FFF3CD)</td><td>#333</td><td><span style="background:#FFF3CD;color:#333;padding:2px 10px;border-radius:4px;font-size:12px;font-weight:bold">3/25</span></td></tr>
+            <tr><td>1일 전</td><td style="background:#E65100;text-align:center;border-radius:4px;color:#fff">주황색 (#E65100)</td><td>#FFF</td><td><span style="background:#E65100;color:#fff;padding:2px 10px;border-radius:4px;font-size:12px;font-weight:bold">3/24</span></td></tr>
+            <tr><td>당일</td><td style="background:#EF5350;text-align:center;border-radius:4px;color:#fff">빨간색 (#EF5350)</td><td>#FFF</td><td><span style="background:#EF5350;color:#fff;padding:2px 10px;border-radius:4px;font-size:12px;font-weight:bold">3/23</span></td></tr>
+            <tr><td>기한 초과</td><td style="background:#7B1FA2;text-align:center;border-radius:4px;color:#fff">보라색 (#7B1FA2)</td><td>#FFF</td><td><span style="background:#7B1FA2;color:#fff;padding:2px 10px;border-radius:4px;font-size:12px;font-weight:bold">3/20</span></td></tr>
         </table>
         <h4>영향 범위</h4>
         <ul class="checklist">
