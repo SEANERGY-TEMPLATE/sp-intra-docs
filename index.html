@@ -92,7 +92,7 @@ a{color:#4361ee;text-decoration:none}
     <div class="nav-section">개요</div>
     <a href="#overview" class="active" onclick="activate(this)">기능 목록</a>
 
-    <div class="nav-section">기능 상세 (15건)</div>
+    <div class="nav-section">기능 상세 (18건)</div>
     <a href="#NEW-001" onclick="activate(this)">NEW-001 대문자 변환 <span class="status s-done">✅ 완료</span></a>
     <a href="#NEW-002" onclick="activate(this)">NEW-002 AED 디르함 <span class="status s-done">✅ 완료</span></a>
     <a href="#NEW-003" onclick="activate(this)">NEW-003 IBK 은행 <span class="status s-done">✅ 완료</span></a>
@@ -112,6 +112,9 @@ a{color:#4361ee;text-decoration:none}
     <a href="#NEW-017" onclick="activate(this)">NEW-017 서비스 모니터링 <span class="status s-wait">대기</span></a>
     <a href="#NEW-018" onclick="activate(this)">NEW-018 서류 편집기 <span class="status s-done">✅ 완료</span></a>
     <a href="#NEW-019" onclick="activate(this)">NEW-019 입금확인+리마인더 <span class="status s-wait">대기</span></a>
+    <a href="#NEW-020" onclick="activate(this)">NEW-020 디머리지/에이전트피 <span class="status s-wait">대기</span></a>
+    <a href="#NEW-021" onclick="activate(this)">NEW-021 메일 발송 상태 <span class="status s-wait">대기</span></a>
+    <a href="#NEW-022" onclick="activate(this)">NEW-022 환율 조회 UI <span class="status s-wait">대기</span></a>
 
     <div class="nav-section">추가 기능</div>
     <a href="#EXT-API" onclick="activate(this)">외부 인쿼리 API <span class="status s-done">✅ 완료</span></a>
@@ -141,6 +144,9 @@ a{color:#4361ee;text-decoration:none}
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-017</span></td><td>서비스 상태 모니터링 대시보드</td><td>미정</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-018</span></td><td>서류(PDF/이미지) 내용 편집기</td><td>B 개발자(하지혁)</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-done">✅ 완료</span></td><td>-</td></tr>
     <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-019</span></td><td>입금 자동 확인 + 페이먼트 리마인더</td><td>미정</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-020</span></td><td>디머리지/에이전트피 추가비용 항목</td><td>미정</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-021</span></td><td>메일 발송 상태 콜백 + UI 반영</td><td>미정</td><td><span class="feature-priority p-high">상</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
+    <tr><td><span class="badge" style="background:#e8eaf6;color:#4361ee">NEW-022</span></td><td>환율 조회 UI (날짜별 환율 표시)</td><td>미정</td><td><span class="feature-priority p-mid">중</span></td><td><span class="status s-wait">대기</span></td><td>-</td></tr>
 </table>
 
 <!-- ==================== NEW-001 ==================== -->
@@ -1404,6 +1410,169 @@ public virtual UserAccount ModUser { get; set; }</pre>
 
         <h4>참고사항</h4>
         <p>은행사 결정 후 API 연동 방식 확정. Part B(리마인더)는 은행 API 없이도 독립 구현 가능 — 지급기한일과 PayCompleteDate만 비교하면 됨.</p>
+    </div>
+</div>
+
+<!-- ==================== NEW-020 ==================== -->
+<div class="feature" id="NEW-020">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-020</span>
+        <span class="feature-title">디머리지/에이전트피 추가비용 항목</span>
+        <span class="feature-priority p-mid">중</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-04-10</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">우선순위</div><div class="value">중</div></div>
+            <div class="meta-item"><div class="label">담당자</div><div class="value">미정</div></div>
+        </div>
+        <h4>배경/목적</h4>
+        <p>구매관리 주문 상세의 추가비용(AddPay) 항목에 현재 BARGE CHARGE만 있음. 실무에서 자주 사용하는 <strong>DEMURRAGE</strong>(정박료)와 <strong>AGENT FEE</strong>(에이전트 수수료)를 추가비용 드롭다운에 추가해야 함.</p>
+        <h4>상세 요구사항</h4>
+        <ol>
+            <li>추가비용 항목(Item) 드롭다운에 <strong>DEMURRAGE</strong> 옵션 추가</li>
+            <li>추가비용 항목(Item) 드롭다운에 <strong>AGENT FEE</strong> 옵션 추가</li>
+            <li>기존 BARGE CHARGE, ETC 와 동일한 구조로 매출/매입 구분 가능</li>
+            <li>인쿼리 파싱 및 외부 API에서도 해당 항목 지원</li>
+        </ol>
+        <h4>영향 범위</h4>
+        <ul class="checklist">
+            <li class="checked">바이어 관리 — 추가비용 등록 UI</li>
+            <li class="unchecked">셀러 관리</li>
+            <li class="unchecked">정산 관리</li>
+            <li class="unchecked">이메일 시스템</li>
+            <li class="unchecked">DB 스키마 변경</li>
+            <li class="unchecked">신규 API 필요</li>
+            <li class="checked">기존 API 수정 — AddPay 항목 유효성</li>
+        </ul>
+        <h4>현재 추가비용 항목</h4>
+        <table class="tbl">
+            <tr><th>항목</th><th>상태</th></tr>
+            <tr><td>BARGE CHARGE</td><td>기존</td></tr>
+            <tr><td>ETC</td><td>기존</td></tr>
+            <tr><td><strong>DEMURRAGE</strong></td><td>신규 추가</td></tr>
+            <tr><td><strong>AGENT FEE</strong></td><td>신규 추가</td></tr>
+        </table>
+    </div>
+</div>
+
+<!-- ==================== NEW-021 ==================== -->
+<div class="feature" id="NEW-021">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-021</span>
+        <span class="feature-title">메일 발송 상태 콜백 + UI 반영</span>
+        <span class="feature-priority p-high">상</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-04-10</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">우선순위</div><div class="value">상</div></div>
+            <div class="meta-item"><div class="label">담당자</div><div class="value">미정</div></div>
+        </div>
+        <h4>배경/목적</h4>
+        <p>현재 메일 발송 시 "송신 요청 성공"만 표시되고, 실제로 메일이 도착했는지/실패했는지 확인할 수 없음. 본서버에서 메일이 안 보내지는 경우가 종종 발생. 메일 발송 상태를 콜백으로 받아서 UI에 반영해야 함.</p>
+        <h4>현재 문제점</h4>
+        <ol>
+            <li>메일 발송 API 호출 → "송신 요청 성공" 표시 → 실제 발송 여부 불명</li>
+            <li>발송 실패 시 사용자에게 알림 없음</li>
+            <li>발송 중/성공/실패 상태를 구분할 수 없음</li>
+            <li>본서버에서 간헐적으로 메일 발송 실패 발생</li>
+        </ol>
+        <h4>상세 요구사항</h4>
+        <ol>
+            <li><strong>발송 상태 콜백</strong>: 메일 서비스(NAVER Outbound Mail)에서 발송 결과 콜백 수신</li>
+            <li><strong>상태 구분</strong>:
+                <ul>
+                    <li><code>PENDING</code> — 발송 요청됨 (대기 중)</li>
+                    <li><code>SENDING</code> — 발송 중</li>
+                    <li><code>SUCCESS</code> — 발송 완료 (수신자 도달)</li>
+                    <li><code>FAILED</code> — 발송 실패</li>
+                    <li><code>BOUNCED</code> — 반송됨 (주소 오류 등)</li>
+                </ul>
+            </li>
+            <li><strong>UI 반영</strong>: 발송 이력 목록에 상태 컬럼 추가 (색상 뱃지로 표시)</li>
+            <li><strong>실패 알림</strong>: 발송 실패 시 관리자에게 알림 (웹 알림 또는 재발송 버튼)</li>
+            <li><strong>재발송</strong>: 실패한 메일을 1클릭으로 재발송할 수 있는 기능</li>
+            <li><strong>자동 재시도</strong>: 발송 실패 시 자동 재시도 (최대 3회, 5분 간격)</li>
+        </ol>
+        <h4>영향 범위</h4>
+        <ul class="checklist">
+            <li class="checked">바이어 관리 — 발송 이력 UI</li>
+            <li class="checked">셀러 관리 — 발송 이력 UI</li>
+            <li class="unchecked">정산 관리</li>
+            <li class="checked">이메일 시스템 — 콜백 수신 + 상태 저장 + 재시도</li>
+            <li class="unchecked">업체 관리</li>
+            <li class="checked">DB 스키마 변경 — OutboundMail 상태 필드 확장</li>
+            <li class="checked">신규 API 필요 — 콜백 수신 엔드포인트</li>
+            <li class="checked">기존 API 수정 — 발송 이력 조회에 상태 포함</li>
+        </ul>
+        <h4>발송 상태 UI 예시</h4>
+        <table class="tbl">
+            <tr><th>상태</th><th>색상</th><th>표시</th></tr>
+            <tr><td>PENDING</td><td style="color:#888;">회색</td><td>대기 중</td></tr>
+            <tr><td>SENDING</td><td style="color:#1565c0;">파란색</td><td>발송 중</td></tr>
+            <tr><td>SUCCESS</td><td style="color:#2e7d32;">초록색</td><td>발송 완료</td></tr>
+            <tr><td>FAILED</td><td style="color:#c62828;">빨간색</td><td>발송 실패 [재발송]</td></tr>
+            <tr><td>BOUNCED</td><td style="color:#e65100;">주황색</td><td>반송됨</td></tr>
+        </table>
+        <h4>참고사항</h4>
+        <p>NAVER Outbound Mail API에서 콜백 지원 여부 확인 필요. 콜백 미지원 시 폴링(주기적 상태 조회) 방식으로 대체 가능.</p>
+    </div>
+</div>
+
+<!-- ==================== NEW-022 ==================== -->
+<div class="feature" id="NEW-022">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-022</span>
+        <span class="feature-title">환율 조회 UI (날짜별 환율 표시)</span>
+        <span class="feature-priority p-mid">중</span>
+        <span class="feature-arrow">&#9660;</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-04-10</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">우선순위</div><div class="value">중</div></div>
+            <div class="meta-item"><div class="label">담당자</div><div class="value">미정</div></div>
+        </div>
+        <h4>배경/목적</h4>
+        <p>동림 인보이스 등에서 환율을 수동으로 확인하고 있음. 기존 환율 API가 이미 연동되어 있으므로, 날짜를 선택하면 해당 날짜의 환율을 바로 조회할 수 있는 UI를 추가. 로그아웃 버튼 왼쪽에 배치.</p>
+        <h4>상세 요구사항</h4>
+        <ol>
+            <li>상단 네비게이션 바의 <strong>로그아웃 버튼 왼쪽</strong>에 환율 조회 영역 배치</li>
+            <li><strong>날짜 선택</strong> (DatePicker) + <strong>환율 표시</strong> 영역</li>
+            <li>날짜 선택 시 해당 날짜의 USD/KRW 환율을 API에서 자동 조회</li>
+            <li>기본값: 오늘 날짜의 환율</li>
+            <li>기존 <code>ExchangeRateService</code> / <code>ExchangeRateController</code> 활용</li>
+            <li>환율 데이터가 없는 날짜 (주말/공휴일)는 가장 가까운 영업일 환율 표시</li>
+        </ol>
+        <h4>UI 배치</h4>
+        <pre class="codeblock">[바이어 관리] [셀러 관리] [정산관리] [업체관리] [회원관리]    📅 2026-04-10  💰 1,382.50원/USD   [로그아웃]</pre>
+        <h4>영향 범위</h4>
+        <ul class="checklist">
+            <li class="checked">바이어 관리 — 상단 네비게이션</li>
+            <li class="checked">셀러 관리 — 상단 네비게이션 (공통 레이아웃)</li>
+            <li class="unchecked">정산 관리</li>
+            <li class="unchecked">이메일 시스템</li>
+            <li class="unchecked">업체 관리</li>
+            <li class="unchecked">DB 스키마 변경</li>
+            <li class="unchecked">신규 API 필요</li>
+            <li class="unchecked">기존 API 수정</li>
+        </ul>
+        <h4>기존 환율 인프라</h4>
+        <table class="tbl">
+            <tr><th>항목</th><th>현재 상태</th></tr>
+            <tr><td>환율 API</td><td><code>ExchangeRateController</code> — 이미 존재</td></tr>
+            <tr><td>환율 서비스</td><td><code>ExchangeRateService</code> — 이미 존재</td></tr>
+            <tr><td>환율 DB</td><td><code>ExchangeRate</code> 테이블 — 이미 존재</td></tr>
+            <tr><td>외부 API</td><td>ExchangeRate API Key — <code>GlobalDatas</code>에 이미 로드</td></tr>
+        </table>
+        <h4>참고사항</h4>
+        <p>환율 표시 UI는 공통 레이아웃(<code>SngNavMenu.razor</code>)에 추가하면 모든 페이지에서 보임. 동림 인보이스 발행 시 해당 환율을 자동으로 적용하는 기능은 추후 확장 가능.</p>
     </div>
 </div>
 
