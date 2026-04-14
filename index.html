@@ -991,100 +991,6 @@ E-mail : ops@globaloms.co.kr</pre></details>
     </div>
 </div>
 
-<!-- ==================== NEW-016 ==================== -->
-<div class="feature collapsed" id="NEW-016">
-    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
-        <span class="feature-id">NEW-016</span>
-        <span class="feature-title">홈페이지 문의 크롤링 (Playwright)</span>
-        <span class="feature-priority p-high">상</span>
-        <span class="feature-arrow">▼</span>
-    </div>
-    <div class="feature-body">
-        <div class="meta">
-            <div class="meta-item"><div class="label">요청자</div><div class="value">팀장</div></div>
-            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-27</div></div>
-            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
-            <div class="meta-item"><div class="label">담당자</div><div class="value">B 개발자(하지혁)</div></div>
-        </div>
-        <h4>배경/목적</h4>
-        <p>신규 홈페이지(SaaS)에 문의가 들어오는데 관리자 인트라넷에서 볼 수 없음. SaaS라 API 없으므로 <strong>Playwright로 브라우저 자동화</strong>하여 크롤링.</p>
-        <h4>현재 → 개선</h4>
-        <table class="tbl">
-            <tr><th>현재</th><th>개선 후</th></tr>
-            <tr><td>직원이 홈페이지 직접 접속해서 문의 확인 (수동)</td><td>Playwright가 5~30분마다 자동 크롤링 → 인트라넷에서 조회</td></tr>
-        </table>
-        <h4>상세 요구사항</h4>
-        <ol>
-            <li>홈페이지 관리자 로그인 → 문의 목록 → 신규 문의 파싱 → DB 저장</li>
-            <li>BackgroundService로 주기적 실행 (5~30분)</li>
-            <li>관리자 UI: 문의 목록 + 상세 + 미처리/처리중/완료 상태</li>
-            <li>중복 방지 + 문의→주문 전환 (NEW-007 연동)</li>
-        </ol>
-        <p style="color:#c62828;font-size:12px;margin-top:8px"><strong>사전 확인:</strong> 홈페이지 관리자 로그인 URL, 로그인 방식(ID/PW? SSO?), 문의 목록 HTML 구조</p>
-        <p style="font-size:12px;color:#888"><strong>주의:</strong> SaaS UI 변경 시 크롤러 수정 필요 / 서버 메모리 200~300MB 추가 / 과도한 크롤링 시 차단 가능</p>
-        <h4>주요 파일 (예상)</h4>
-        <table class="tbl">
-            <tr><th>파일</th><th>설명</th></tr>
-            <tr><td><code>Services/Crawler/InquiryCrawlerService.cs</code></td><td>Playwright 크롤러 (BackgroundService)</td></tr>
-            <tr><td><code>Models/DB/WebInquiry.cs</code></td><td>크롤링된 문의 DB 모델</td></tr>
-            <tr><td><code>Controllers/WebInquiryController.cs</code></td><td>문의 조회 API</td></tr>
-            <tr><td><code>Pages/WebInquiryList.razor</code></td><td>문의 관리 UI</td></tr>
-        </table>
-    </div>
-</div>
-
-<!-- ==================== NEW-017 ==================== -->
-<div class="feature collapsed" id="NEW-017">
-    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
-        <span class="feature-id">NEW-017</span>
-        <span class="feature-title">서비스 상태 모니터링 대시보드</span>
-        <span class="feature-priority p-mid">중</span>
-        <span class="feature-arrow">▼</span>
-    </div>
-    <div class="feature-body">
-        <div class="meta">
-            <div class="meta-item"><div class="label">요청자</div><div class="value">팀장</div></div>
-            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-27</div></div>
-            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
-            <div class="meta-item"><div class="label">담당자</div><div class="value">B 개발자(하지혁)</div></div>
-        </div>
-        <h4>배경/목적</h4>
-        <p>운영 중인 서버/서비스가 여러 개인데 상태를 한눈에 확인할 수 없음. 네이버웍스 Service Health 대시보드를 벤치마킹하여 자체 모니터링 구축.</p>
-        <h4>벤치마킹: 네이버웍스 Service Health</h4>
-        <ul>
-            <li>서비스별 <strong>정상/점검중/장애</strong> 상태 표시</li>
-            <li>카테고리 분류 (공통, 코어 서비스, 드라이브 등)</li>
-            <li>심플한 UI — 서비스명 + 상태 아이콘</li>
-        </ul>
-        <h4>모니터링 대상 (확인 필요)</h4>
-        <table class="tbl">
-            <tr><th>서비스</th><th>헬스체크 방식</th></tr>
-            <tr><td>인트라넷 프론트</td><td>HTTP GET → 200 OK</td></tr>
-            <tr><td>백엔드 API</td><td>HTTP GET /health → 200 OK</td></tr>
-            <tr><td>홈페이지</td><td>HTTP GET → 200 OK</td></tr>
-            <tr><td>DB (SQL Server)</td><td>TCP 연결 테스트</td></tr>
-            <tr><td>DDD 공휴일 API (Nager)</td><td>HTTP GET → 200 OK</td></tr>
-        </table>
-        <h4>상세 요구사항</h4>
-        <ol>
-            <li><strong>헬스체크 서비스</strong> — BackgroundService, 30초~1분 간격, 타임아웃 5초</li>
-            <li><strong>대시보드 UI</strong> — 서비스명 + 상태 아이콘 (정상 ✅ / 장애 ❌) + 응답 시간(ms)</li>
-            <li><strong>이력 저장</strong> — 상태 변경 이력 DB 저장 (장애 발생/복구 시점)</li>
-            <li><strong>(선택) 알림</strong> — 장애 감지 시 이메일 또는 네이버웍스 봇 알림</li>
-        </ol>
-        <h4>구현 단계</h4>
-        <table class="tbl">
-            <tr><th>단계</th><th>내용</th><th>난이도</th></tr>
-            <tr><td>1단계</td><td>HTTP 헬스체크 + 대시보드 UI</td><td>중</td></tr>
-            <tr><td>2단계</td><td>알림 + 이력 그래프</td><td>상</td></tr>
-        </table>
-        <h4>ASP.NET Core 내장 헬스체크 활용</h4>
-        <pre class="codeblock">builder.Services.AddHealthChecks()
-    .AddSqlServer(connectionString)
-    .AddUrlGroup(new Uri("https://..."), "Homepage");</pre>
-    </div>
-</div>
-
 <!-- ==================== NEW-013 ==================== -->
 <div class="feature collapsed" id="NEW-013">
     <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
@@ -1238,6 +1144,100 @@ public virtual UserAccount ModUser { get; set; }</pre>
             <tr><td><code>RespSearchOrderDetail.cs</code></td><td>ModUserName 필드 추가</td></tr>
             <tr><td><code>OrderList.razor</code> L417</td><td>수정자명 + 시간 표시</td></tr>
         </table>
+    </div>
+</div>
+
+<!-- ==================== NEW-016 ==================== -->
+<div class="feature collapsed" id="NEW-016">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-016</span>
+        <span class="feature-title">홈페이지 문의 크롤링 (Playwright)</span>
+        <span class="feature-priority p-high">상</span>
+        <span class="feature-arrow">▼</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청자</div><div class="value">팀장</div></div>
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-27</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">담당자</div><div class="value">B 개발자(하지혁)</div></div>
+        </div>
+        <h4>배경/목적</h4>
+        <p>신규 홈페이지(SaaS)에 문의가 들어오는데 관리자 인트라넷에서 볼 수 없음. SaaS라 API 없으므로 <strong>Playwright로 브라우저 자동화</strong>하여 크롤링.</p>
+        <h4>현재 → 개선</h4>
+        <table class="tbl">
+            <tr><th>현재</th><th>개선 후</th></tr>
+            <tr><td>직원이 홈페이지 직접 접속해서 문의 확인 (수동)</td><td>Playwright가 5~30분마다 자동 크롤링 → 인트라넷에서 조회</td></tr>
+        </table>
+        <h4>상세 요구사항</h4>
+        <ol>
+            <li>홈페이지 관리자 로그인 → 문의 목록 → 신규 문의 파싱 → DB 저장</li>
+            <li>BackgroundService로 주기적 실행 (5~30분)</li>
+            <li>관리자 UI: 문의 목록 + 상세 + 미처리/처리중/완료 상태</li>
+            <li>중복 방지 + 문의→주문 전환 (NEW-007 연동)</li>
+        </ol>
+        <p style="color:#c62828;font-size:12px;margin-top:8px"><strong>사전 확인:</strong> 홈페이지 관리자 로그인 URL, 로그인 방식(ID/PW? SSO?), 문의 목록 HTML 구조</p>
+        <p style="font-size:12px;color:#888"><strong>주의:</strong> SaaS UI 변경 시 크롤러 수정 필요 / 서버 메모리 200~300MB 추가 / 과도한 크롤링 시 차단 가능</p>
+        <h4>주요 파일 (예상)</h4>
+        <table class="tbl">
+            <tr><th>파일</th><th>설명</th></tr>
+            <tr><td><code>Services/Crawler/InquiryCrawlerService.cs</code></td><td>Playwright 크롤러 (BackgroundService)</td></tr>
+            <tr><td><code>Models/DB/WebInquiry.cs</code></td><td>크롤링된 문의 DB 모델</td></tr>
+            <tr><td><code>Controllers/WebInquiryController.cs</code></td><td>문의 조회 API</td></tr>
+            <tr><td><code>Pages/WebInquiryList.razor</code></td><td>문의 관리 UI</td></tr>
+        </table>
+    </div>
+</div>
+
+<!-- ==================== NEW-017 ==================== -->
+<div class="feature collapsed" id="NEW-017">
+    <div class="feature-header" onclick="this.parentElement.classList.toggle('collapsed')">
+        <span class="feature-id">NEW-017</span>
+        <span class="feature-title">서비스 상태 모니터링 대시보드</span>
+        <span class="feature-priority p-mid">중</span>
+        <span class="feature-arrow">▼</span>
+    </div>
+    <div class="feature-body">
+        <div class="meta">
+            <div class="meta-item"><div class="label">요청자</div><div class="value">팀장</div></div>
+            <div class="meta-item"><div class="label">요청일</div><div class="value">2026-03-27</div></div>
+            <div class="meta-item"><div class="label">상태</div><div class="value">대기</div></div>
+            <div class="meta-item"><div class="label">담당자</div><div class="value">B 개발자(하지혁)</div></div>
+        </div>
+        <h4>배경/목적</h4>
+        <p>운영 중인 서버/서비스가 여러 개인데 상태를 한눈에 확인할 수 없음. 네이버웍스 Service Health 대시보드를 벤치마킹하여 자체 모니터링 구축.</p>
+        <h4>벤치마킹: 네이버웍스 Service Health</h4>
+        <ul>
+            <li>서비스별 <strong>정상/점검중/장애</strong> 상태 표시</li>
+            <li>카테고리 분류 (공통, 코어 서비스, 드라이브 등)</li>
+            <li>심플한 UI — 서비스명 + 상태 아이콘</li>
+        </ul>
+        <h4>모니터링 대상 (확인 필요)</h4>
+        <table class="tbl">
+            <tr><th>서비스</th><th>헬스체크 방식</th></tr>
+            <tr><td>인트라넷 프론트</td><td>HTTP GET → 200 OK</td></tr>
+            <tr><td>백엔드 API</td><td>HTTP GET /health → 200 OK</td></tr>
+            <tr><td>홈페이지</td><td>HTTP GET → 200 OK</td></tr>
+            <tr><td>DB (SQL Server)</td><td>TCP 연결 테스트</td></tr>
+            <tr><td>DDD 공휴일 API (Nager)</td><td>HTTP GET → 200 OK</td></tr>
+        </table>
+        <h4>상세 요구사항</h4>
+        <ol>
+            <li><strong>헬스체크 서비스</strong> — BackgroundService, 30초~1분 간격, 타임아웃 5초</li>
+            <li><strong>대시보드 UI</strong> — 서비스명 + 상태 아이콘 (정상 ✅ / 장애 ❌) + 응답 시간(ms)</li>
+            <li><strong>이력 저장</strong> — 상태 변경 이력 DB 저장 (장애 발생/복구 시점)</li>
+            <li><strong>(선택) 알림</strong> — 장애 감지 시 이메일 또는 네이버웍스 봇 알림</li>
+        </ol>
+        <h4>구현 단계</h4>
+        <table class="tbl">
+            <tr><th>단계</th><th>내용</th><th>난이도</th></tr>
+            <tr><td>1단계</td><td>HTTP 헬스체크 + 대시보드 UI</td><td>중</td></tr>
+            <tr><td>2단계</td><td>알림 + 이력 그래프</td><td>상</td></tr>
+        </table>
+        <h4>ASP.NET Core 내장 헬스체크 활용</h4>
+        <pre class="codeblock">builder.Services.AddHealthChecks()
+    .AddSqlServer(connectionString)
+    .AddUrlGroup(new Uri("https://..."), "Homepage");</pre>
     </div>
 </div>
 
@@ -1409,20 +1409,55 @@ public virtual UserAccount ModUser { get; set; }</pre>
             <div class="meta-item"><div class="label">담당자</div><div class="value">A 개발자(김동현)</div></div>
         </div>
         <h4>배경/목적</h4>
-        <p>바이어 관리 화면에서 라디오버튼 정렬 미흡, IMO 미표시, 필수 입력 필드 구분 불가 등으로 휴먼에러 발생 가능성 높음.</p>
+        <p>바이어 관리 화면에서 라디오버튼 정렬 미흡, IMO 미표시, 필수 입력 필드 구분 부재 등으로 휴먼에러 발생 가능성 높음. UI/UX 차원에서 체계적으로 개선.</p>
+
         <h4>상세 요구사항</h4>
         <table class="tbl">
-            <tr><th>#</th><th>항목</th><th>현재</th><th>개선</th></tr>
-            <tr><td>1</td><td><strong>라디오버튼 정렬</strong></td><td>DELIVERED/EX-WHARF 등 정렬 안 됨</td><td>세로 정렬 통일</td></tr>
-            <tr><td>2</td><td><strong>IMO 필드 추가</strong></td><td>헤더에 선박명만 표시</td><td>선박명 옆에 IMO 표시 + 검색 헤더에 IMO 컬럼 추가</td></tr>
-            <tr><td>3</td><td><strong>필수필드 빨간 테두리</strong></td><td>BDR 발행자, 바지선명, 공급완료일 구분 안 됨</td><td>빨간 테두리로 필수 입력 강조</td></tr>
+            <tr><th>#</th><th>항목</th><th>현재</th><th>개선</th><th>적용 범위</th></tr>
+            <tr>
+                <td>1</td>
+                <td><strong>라디오버튼 정렬</strong></td>
+                <td>DELIVERED / EX-WHARF, SPOT / TERM, FLOATING / FIXED 가 정렬 안 됨</td>
+                <td>EX-WHARF 쪽으로 하단 정렬 (라디오그룹 세로 정렬 통일)</td>
+                <td>바이어 관리</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td><strong>IMO 필드 추가</strong></td>
+                <td>헤더에 선박명만 표시, IMO 없음</td>
+                <td>선박명 옆에 IMO 표시 + 검색 헤더에도 IMO 컬럼 추가</td>
+                <td>바이어 관리</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td><strong>필수필드 빨간 테두리</strong></td>
+                <td>BDR 발행자, 바지선명, 공급완료일 필드가 일반 필드와 구분 안 됨</td>
+                <td>해당 3개 필드 테두리를 <span style="color:#EF5350;font-weight:bold">빨간색</span>으로 표시하여 필수 입력 강조</td>
+                <td>바이어 관리만 (셀러 관리 제외)</td>
+            </tr>
         </table>
+
+        <h4>필수필드 빨간 테두리 대상 (바이어 관리만)</h4>
+        <table class="tbl">
+            <tr><th>필드</th><th>위치</th><th>이유</th></tr>
+            <tr><td><strong>BDR 발행자</strong></td><td>유종 정보 영역</td><td>BDR 발행 시 누락 방지</td></tr>
+            <tr><td><strong>바지선명</strong></td><td>배선 정보 영역</td><td>정산 시 바지선 매칭 필수</td></tr>
+            <tr><td><strong>공급완료일</strong></td><td>공급일 영역</td><td>DDD 계산 및 정산 기준일</td></tr>
+        </table>
+
         <h4>영향 범위</h4>
         <ul class="checklist">
-            <li class="checked">바이어 관리 — OrderList.razor</li>
-            <li class="unchecked">셀러 관리</li>
+            <li class="checked">바이어 관리 — OrderList.razor (라디오 정렬 + IMO + 빨간 테두리)</li>
+            <li class="unchecked">셀러 관리 — 적용 안 함</li>
             <li class="unchecked">백엔드 변경 없음</li>
         </ul>
+
+        <h4>주요 수정 파일</h4>
+        <table class="tbl">
+            <tr><th>파일</th><th>변경 내용</th></tr>
+            <tr><td><code>OrderList.razor</code></td><td>라디오버튼 정렬 CSS + IMO 컬럼 추가 + 필수필드 빨간 테두리 스타일</td></tr>
+            <tr><td><code>OrderList.razor.cs</code></td><td>IMO 데이터 바인딩 (기존 Ship.Imo 활용)</td></tr>
+        </table>
     </div>
 </div>
 
@@ -1442,33 +1477,61 @@ public virtual UserAccount ModUser { get; set; }</pre>
             <div class="meta-item"><div class="label">담당자</div><div class="value">A 개발자(김동현)</div></div>
         </div>
         <h4>배경/목적</h4>
-        <p>커미션 수수료(브로커리지) 거래를 일반 거래와 구분해서 관리해야 함. 태그로 시각 구분 + 필터로 브로커리지 건만 조회 가능해야 함.</p>
+        <p>톤당 수수료(브로커리지) 거래를 일반 거래와 구분해서 관리해야 함. 태그로 시각 구분 + 필터로 브로커리지 건만 조회 가능해야 함.</p>
+
         <h4>상세 요구사항</h4>
         <ol>
-            <li>BUNKER ONLY 체크박스 아래에 <strong>"BROKERAGE"</strong> 체크박스 추가</li>
-            <li>기존 태그(M/B, B/O, N/I)에 <strong>B/K : Brokerage</strong> 추가 (골드 그라데이션)</li>
-            <li>태그 헤더에 <strong>"브로커리지"</strong> 필터 버튼 추가 (토글)</li>
+            <li><strong>브로커리지 체크박스 추가</strong>: BUNKER ONLY 체크박스 바로 아래에 <strong>"BROKERAGE"</strong> 체크박스 추가</li>
+            <li><strong>태그 표시</strong>: 기존 태그 영역(M/B, B/O, N/I)에 <strong>B/K : Brokerage</strong> 추가
+                <ul>
+                    <li>태그 디자인: 다른 태그와 차별화된 독특한 스타일 (그라데이션 or 골드 계열)</li>
+                </ul>
+            </li>
+            <li><strong>브로커리지 필터 버튼</strong>: 태그 헤더 위에 <strong>"브로커리지"</strong> 필터 버튼 추가
+                <ul>
+                    <li>클릭 시 브로커리지 태그가 있는 주문만 필터링</li>
+                    <li>다시 클릭 시 필터 해제 (토글)</li>
+                </ul>
+            </li>
+            <li><strong>태그 정보 팝오버 업데이트</strong>: 기존 M/B, B/O, N/I에 B/K 설명 추가</li>
         </ol>
+
         <h4>태그 디자인</h4>
         <table class="tbl">
-            <tr><th>태그</th><th>약어</th><th>스타일</th></tr>
-            <tr><td>Multi barge</td><td>M/B</td><td>기존</td></tr>
-            <tr><td>Bunker only</td><td>B/O</td><td>기존</td></tr>
-            <tr><td>Not internal</td><td>N/I</td><td>기존</td></tr>
-            <tr><td><strong>Brokerage</strong></td><td><strong>B/K</strong></td><td><span style="background:linear-gradient(135deg,#FFD700,#FFA500);color:#333;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:bold">B/K</span></td></tr>
+            <tr><th>태그</th><th>약어</th><th>스타일</th><th>예시</th></tr>
+            <tr><td>Multi barge</td><td>M/B</td><td>기존 스타일</td><td><span style="background:#e0e0e0;padding:2px 6px;border-radius:3px;font-size:11px">M/B</span></td></tr>
+            <tr><td>Bunker only</td><td>B/O</td><td>기존 스타일</td><td><span style="background:#e0e0e0;padding:2px 6px;border-radius:3px;font-size:11px">B/O</span></td></tr>
+            <tr><td>Not internal</td><td>N/I</td><td>기존 스타일</td><td><span style="background:#e0e0e0;padding:2px 6px;border-radius:3px;font-size:11px">N/I</span></td></tr>
+            <tr><td><strong>Brokerage</strong></td><td><strong>B/K</strong></td><td><strong>골드 그라데이션 + 볼드</strong></td><td><span style="background:linear-gradient(135deg,#FFD700,#FFA500);color:#333;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:bold;box-shadow:0 1px 3px rgba(0,0,0,.2)">B/K</span></td></tr>
         </table>
-        <h4>DB 변경</h4>
-        <table class="tbl">
-            <tr><th>테이블</th><th>컬럼</th><th>타입</th></tr>
-            <tr><td>OrderInfo</td><td>IsBrokerage</td><td>bit (default 0)</td></tr>
-        </table>
+
         <h4>영향 범위</h4>
         <ul class="checklist">
-            <li class="checked">바이어 관리 — 체크박스 + 태그 + 필터</li>
-            <li class="checked">셀러 관리 — 태그 표시 + 필터</li>
+            <li class="checked">바이어 관리 — OrderList.razor (체크박스 + 태그 + 필터 버튼)</li>
+            <li class="checked">셀러 관리 — SalesOrderList.razor (태그 표시 + 필터)</li>
             <li class="checked">기존 API 수정 — 브로커리지 플래그 저장/조회</li>
-            <li class="checked">DB — OrderInfo에 IsBrokerage 필드 추가</li>
+            <li class="checked">DB — OrderInfo에 IsBrokerage 필드 추가 (bit)</li>
         </ul>
+
+        <h4>DB 변경</h4>
+        <table class="tbl">
+            <tr><th>테이블</th><th>컬럼</th><th>타입</th><th>설명</th></tr>
+            <tr><td>OrderInfo</td><td>IsBrokerage</td><td>bit (default 0)</td><td>브로커리지 거래 여부</td></tr>
+        </table>
+
+        <h4>주요 수정 파일</h4>
+        <table class="tbl">
+            <tr><th>파일</th><th>변경 내용</th></tr>
+            <tr><td><code>OrderList.razor</code></td><td>BROKERAGE 체크박스 + B/K 태그 + 필터 버튼 UI</td></tr>
+            <tr><td><code>OrderList.razor.cs</code></td><td>IsBrokerage 바인딩 + 필터 로직</td></tr>
+            <tr><td><code>SalesOrderList.razor</code></td><td>B/K 태그 표시</td></tr>
+            <tr><td><code>SalesOrderList.razor.cs</code></td><td>IsBrokerage 바인딩</td></tr>
+            <tr><td><code>OrdersController.cs</code></td><td>IsBrokerage 필터 쿼리 파라미터</td></tr>
+            <tr><td><code>OrderInfo.cs</code></td><td>IsBrokerage 프로퍼티 추가</td></tr>
+        </table>
+
+        <h4>참고</h4>
+        <p>브로커리지 태그는 골드 그라데이션으로 다른 태그와 시각적 차별화. 필터 버튼은 활성화 시 골드 배경으로 토글 표시.</p>
     </div>
 </div>
 
